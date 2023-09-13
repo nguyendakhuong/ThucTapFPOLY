@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "363050580217",
+    "project_id": "thuc-tap-fpoly",
+    "storage_bucket": "thuc-tap-fpoly.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:363050580217:android:d33e863d129533ba4fca28",
+        "android_client_info": {
+          "package_name": "khuonndph14998.fpoly.thuctapfpoly"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBs5x-VtKn5B9ZuWbJKAYmwdkyk5JINn-s"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
