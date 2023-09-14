@@ -38,8 +38,6 @@ public class HomeFragment extends Fragment {
         rclViewHome = view.findViewById(R.id.rclViewHome);
         viewFlipper = view.findViewById(R.id.viewFlipper);
 
-
-
         List<String> arrayAdvertisement  = new ArrayList<>();
         arrayAdvertisement .add("https://vn-live-01.slatic.net/p/72a4db5f460de80f920ab2da766a6b8a.jpg");
         arrayAdvertisement .add("https://vn-live-01.slatic.net/p/4ddecccebb4f73ce3beae5845a35ad87.jpg");

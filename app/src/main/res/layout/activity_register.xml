@@ -6,15 +6,15 @@
     android:layout_height="match_parent"
     tools:context=".auth.RegisterActivity"
     android:orientation="vertical">
+
     <TextView
+        android:id="@+id/text_toAdmin"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Register"
         android:gravity="center"
         android:textSize="20dp"
-        android:layout_margin="100dp"/>
-
-
+        android:layout_margin="60dp"/>
     <com.google.android.material.textfield.TextInputLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -24,6 +24,26 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Nhập Email "/>
+    </com.google.android.material.textfield.TextInputLayout>
+    <com.google.android.material.textfield.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp">
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/input_register_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Nhập họ tên "/>
+    </com.google.android.material.textfield.TextInputLayout>
+    <com.google.android.material.textfield.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp">
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/input_register_phone"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Nhập Số điện thoại "/>
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout

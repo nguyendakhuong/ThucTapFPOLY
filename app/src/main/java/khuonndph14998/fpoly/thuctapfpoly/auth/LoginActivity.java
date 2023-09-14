@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ProgressBar;
@@ -13,14 +14,20 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import khuonndph14998.fpoly.thuctapfpoly.MainActivity;
 import khuonndph14998.fpoly.thuctapfpoly.R;
+import khuonndph14998.fpoly.thuctapfpoly.admin.AdminActivity;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -28,6 +35,7 @@ public class LoginActivity extends AppCompatActivity {
     Button btnLogin;
     TextView textToRegister;
     FirebaseAuth mAuth;
+    FirebaseFirestore fStore;
     ProgressBar progressBar;
 
     @Override
@@ -64,21 +72,20 @@ public class LoginActivity extends AppCompatActivity {
                 }
                 progressBar.setVisibility(View.VISIBLE);
 
-                mAuth.signInWithEmailAndPassword(email,password)
-                        .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                            @Override
-                            public void onComplete(@NonNull Task<AuthResult> task) {
-                                progressBar.setVisibility(View.GONE);
-                                if (task.isSuccessful()){
-                                    Toast.makeText(LoginActivity.this, "Đăng nhập thành công", Toast.LENGTH_SHORT).show();
-                                    Intent i = new Intent(getApplicationContext(), MainActivity.class);
-                                    startActivity(i);
-                                    finish();
-                                }else {
-                                    Toast.makeText(LoginActivity.this, "Đăng nhập thất bại", Toast.LENGTH_SHORT).show();
-                                }
-                            }
-                        });
+                mAuth.signInWithEmailAndPassword(email,password).addOnSuccessListener(new OnSuccessListener<AuthResult>() {
+                    @Override
+                    public void onSuccess(AuthResult authResult) {
+                        progressBar.setVisibility(View.GONE);
+                        Toast.makeText(LoginActivity.this, "Đăng nhập thành công", Toast.LENGTH_SHORT).show();
+                        checkUserAccessLevel(authResult.getUser().getUid());
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        progressBar.setVisibility(View.GONE);
+                        Toast.makeText(LoginActivity.this, "Đăng nhập thất bại", Toast.LENGTH_SHORT).show();
+                    }
+                });
             }
         });
 
@@ -91,12 +98,43 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
     }
+
+    private void checkUserAccessLevel(String uid) {
+        DocumentReference df = fStore.collection("User").document(uid);
+        df.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                Log.d("Tag","Thành công: "+documentSnapshot.getData());
+                if (documentSnapshot.exists()) {
+                    Log.d("Tag", "Dữ liệu tài liệu: " + documentSnapshot.getData());
+
+                    // Tiếp tục xử lý dữ liệu
+                } else {
+                    Log.d("Tag", "Tài liệu không tồn tại");
+                }
+
+
+                if (documentSnapshot.getString("admin") != null){
+                    Intent i = new Intent(getApplicationContext(),AdminActivity.class);
+                    startActivity(i);
+                    finish();
+                }
+                if (documentSnapshot.getString("isUser") != null){
+                    Intent i = new Intent(getApplicationContext(),MainActivity.class);
+                    startActivity(i);
+                    finish();
+                }
+            }
+        });
+    }
+
     private void anhxa(){
         editTextEmail = findViewById(R.id.input_login_email);
         editTextPassword = findViewById(R.id.input_login_password);
         btnLogin = findViewById(R.id.btn_login);
         textToRegister = findViewById(R.id.text_toRegister);
         mAuth = FirebaseAuth.getInstance();
+        fStore = FirebaseFirestore.getInstance();
         progressBar = findViewById(R.id.progressbar);
     }
 }
