@@ -50,12 +50,10 @@ public class RegisterActivity extends AppCompatActivity {
         btnRegister.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                progressBar.setVisibility(View.VISIBLE);
-                String email,password,confirmPassword,phone;
-                email = String.valueOf(editTextEmail.getText());
-                password = String.valueOf(editTextPassword.getText());
-                confirmPassword = String.valueOf(editTextComfirmPassword.getText());
-
+                String email = editTextEmail.getText().toString().trim();
+                String password = editTextPassword.getText().toString().trim();
+                String confirmPassword = editTextComfirmPassword.getText().toString().trim();
+                String emailPattern = "^([a-zA-Z0-9_\\.\\-])+\\@(([a-zA-Z0-9\\-])+\\.)+([a-zA-Z0-9]{2,4})+$";
 
                 if (TextUtils.isEmpty(email)){
                     Toast.makeText(RegisterActivity.this, "Nhập email", Toast.LENGTH_SHORT).show();
@@ -69,7 +67,19 @@ public class RegisterActivity extends AppCompatActivity {
                     Toast.makeText(RegisterActivity.this, "Nhập confirmPassword", Toast.LENGTH_SHORT).show();
                     return;
                 }
-
+                if (!password.equals(confirmPassword)) {
+                    Toast.makeText(RegisterActivity.this, "Mật khẩu không khớp", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                if (!email.matches(emailPattern)){
+                    Toast.makeText(RegisterActivity.this, "Chưa đúng định dạng email", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                if (password.length() < 6 ){
+                    Toast.makeText(RegisterActivity.this, "Mật khẩu tối thiểu phải 6 kí tự", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                progressBar.setVisibility(View.VISIBLE);
 
                 mAuth.createUserWithEmailAndPassword(email,password)
                         .addOnCompleteListener( new OnCompleteListener<AuthResult>() {
@@ -81,7 +91,9 @@ public class RegisterActivity extends AppCompatActivity {
                                     Intent i = new Intent(getApplicationContext(), LoginActivity.class);
                                     startActivity(i);
                                     finish();
-                                }else {
+                                } else if(task.getException() != null){
+                                    Toast.makeText(RegisterActivity.this, "Tài khoản đã tồn tại", Toast.LENGTH_SHORT).show();
+                                } else {
                                     Toast.makeText(RegisterActivity.this, "Đăng ký thất bại", Toast.LENGTH_SHORT).show();
                                 }
                             }

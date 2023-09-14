@@ -1,9 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
-
     <item android:title="home" android:icon="@drawable/ic_baseline_home" android:id="@+id/home"/>
     <item android:title="favorite" android:icon="@drawable/ic_baseline_favorite" android:id="@+id/favorite"/>
     <item android:title="payment" android:icon="@drawable/ic_baseline_payment" android:id="@+id/payment"/>
     <item android:title="settings" android:icon="@drawable/ic_baseline_settings" android:id="@+id/settings"/>
-
 </menu>

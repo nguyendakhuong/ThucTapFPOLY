@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".frameLayout.SettingFragment">
+    tools:context=".fragment.SettingFragment">
 
     <!-- TODO: Update blank fragment layout -->
     <LinearLayout
@@ -14,11 +14,13 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Setting Fragment"/>
+
         <Button
+            android:id="@+id/fragment_button_logout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Logout"
-            android:id="@+id/fragment_setting_logout"/>
+            android:background="@color/black"
+            android:text="Logout" />
     </LinearLayout>
 
 </FrameLayout>

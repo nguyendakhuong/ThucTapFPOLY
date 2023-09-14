@@ -56,12 +56,14 @@ public class LoginActivity extends AppCompatActivity {
 
                 if (TextUtils.isEmpty(email)){
                     Toast.makeText(LoginActivity.this, "Nhập email", Toast.LENGTH_SHORT).show();
-                    return;
+                    return ;
                 }
                 if (TextUtils.isEmpty(password)){
                     Toast.makeText(LoginActivity.this, "Nhập mật khẩu", Toast.LENGTH_SHORT).show();
                     return;
                 }
+                progressBar.setVisibility(View.VISIBLE);
+
                 mAuth.signInWithEmailAndPassword(email,password)
                         .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                             @Override
@@ -79,6 +81,7 @@ public class LoginActivity extends AppCompatActivity {
                         });
             }
         });
+
         textToRegister.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

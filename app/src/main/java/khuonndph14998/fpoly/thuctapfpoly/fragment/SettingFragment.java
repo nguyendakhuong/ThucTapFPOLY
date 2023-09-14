@@ -20,7 +20,7 @@ public class SettingFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_setting, container, false);
-        Button logoutButton = view.findViewById(R.id.fragment_setting_logout);
+        Button logoutButton = view.findViewById(R.id.fragment_button_logout);
         FirebaseAuth auth = FirebaseAuth.getInstance();
         FirebaseUser user = auth.getCurrentUser();
         if (user == null ){
