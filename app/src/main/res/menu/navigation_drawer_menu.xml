@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn = "navigation_view">
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/admin_account"
+            android:icon="@drawable/ic_baseline_manage_accounts"
+            android:title="account" />
+        <item
+            android:id="@+id/admin_product"
+            android:icon="@drawable/ic_baseline_playlist_add"
+            android:title="product" />
+        <item
+            android:id="@+id/a"
+            android:icon="@drawable/ic_baseline_payment"
+            android:title="payment" />
+        <item
+            android:id="@+id/b"
+            android:icon="@drawable/ic_baseline_settings"
+            android:title="settings" />
+    </group>
+    <group android:checkableBehavior="single">
+        <item android:title="Admin" android:orderInCategory="100">
+            <menu>
+                <item
+                    android:id="@+id/admin_delete_account_admin"
+                    android:icon="@drawable/ic_baseline_settings"
+                    android:title="Delete the account" />
+                <item
+                    android:id="@+id/admin_logout"
+                    android:icon="@drawable/ic_baseline_logout"
+                    android:title="Logout" />
+            </menu>
+        </item>
+    </group>
+</menu>

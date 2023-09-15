@@ -40,16 +40,16 @@ public class RegisterActivity extends AppCompatActivity {
     ProgressBar progressBar;
     FirebaseFirestore fstore;
 
-    @Override
-    protected void onStart() {
-        super.onStart();
-        FirebaseUser user = fAuth.getCurrentUser();
-        if (user != null){
-            Intent i = new Intent(getApplicationContext(), MainActivity.class);
-            startActivity(i);
-            finish();
-        }
-    }
+//    @Override
+//    protected void onStart() {
+//        super.onStart();
+//        FirebaseUser user = fAuth.getCurrentUser();
+//        if (user != null){
+//            Intent i = new Intent(getApplicationContext(), MainActivity.class);
+//            startActivity(i);
+//            finish();
+//        }
+//    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -101,36 +101,51 @@ public class RegisterActivity extends AppCompatActivity {
                     return;
                 }
                 progressBar.setVisibility(View.VISIBLE);
-                fAuth.createUserWithEmailAndPassword(email,password)
+                fAuth.createUserWithEmailAndPassword(email, password)
                         .addOnSuccessListener(new OnSuccessListener<AuthResult>() {
                             @Override
                             public void onSuccess(AuthResult authResult) {
-                                progressBar.setVisibility(View.GONE);
                                 FirebaseUser user = fAuth.getCurrentUser();
-                                Toast.makeText(RegisterActivity.this, "Đăng ký thành công", Toast.LENGTH_SHORT).show();
-                                DocumentReference df = fstore.collection("User").document(user.getUid());
-                                Map<String,Object> userInfo = new HashMap<>();
-                                userInfo.put("email",email);
-                                userInfo.put("fullname",name);
-                                userInfo.put("phone",phone);
-
-                                userInfo.put("isUser","1");
-                                df.set(userInfo);
-
-                                startActivity(new Intent(getApplicationContext(), MainActivity.class));
-                                finish();
-
+                                if (user != null) {
+                                    user.sendEmailVerification().addOnCompleteListener(new OnCompleteListener<Void>() {
+                                        @Override
+                                        public void onComplete(@NonNull Task<Void> task) {
+                                            if (task.isSuccessful()) {
+                                                Toast.makeText(RegisterActivity.this, "Đăng ký thành công. Vui lòng kiểm tra email để xác thực tài khoản.", Toast.LENGTH_SHORT).show();
+                                                startActivity(new Intent(getApplicationContext(), LoginActivity.class));
+                                            } else {
+                                                progressBar.setVisibility(View.GONE);
+                                                Toast.makeText(RegisterActivity.this, "Đăng ký thất bại", Toast.LENGTH_SHORT).show();
+                                            }
+                                        }
+                                    });
+                                }
                             }
                         }).addOnFailureListener(new OnFailureListener() {
                             @Override
                             public void onFailure(@NonNull Exception e) {
                                 progressBar.setVisibility(View.GONE);
                                 Toast.makeText(RegisterActivity.this, "Đăng ký thất bại", Toast.LENGTH_SHORT).show();
-
                             }
                         });
+                FirebaseAuth.getInstance().addIdTokenListener(new FirebaseAuth.IdTokenListener() {
+                    @Override
+                    public void onIdTokenChanged(@NonNull FirebaseAuth firebaseAuth) {
+                        FirebaseUser user = firebaseAuth.getCurrentUser();
+                        if (user != null && user.isEmailVerified()) {
+                            // Người dùng đã xác thực email, lưu dữ liệu vào Firestore
+                            DocumentReference df = fstore.collection("User").document(user.getUid());
+                            Map<String, Object> userInfo = new HashMap<>();
+                            userInfo.put("email", email);
+                            userInfo.put("fullname", name);
+                            userInfo.put("phone", phone);
+                            userInfo.put("isUser", "1");
+                            df.set(userInfo);
+                            finish();
+                        }
+                    }
+                });
             }
-
         });
         textToLogin.setOnClickListener(new View.OnClickListener() {
             @Override

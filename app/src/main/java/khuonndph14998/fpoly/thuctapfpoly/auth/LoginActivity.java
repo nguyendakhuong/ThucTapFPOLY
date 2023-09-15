@@ -38,16 +38,16 @@ public class LoginActivity extends AppCompatActivity {
     FirebaseFirestore fStore;
     ProgressBar progressBar;
 
-    @Override
-    protected void onStart() {
-        super.onStart();
-        FirebaseUser user = mAuth.getCurrentUser();
-        if (user != null){
-            Intent i = new Intent(getApplicationContext(), MainActivity.class);
-            startActivity(i);
-            finish();
-        }
-    }
+//    @Override
+//    protected void onStart() {
+//        super.onStart();
+//        FirebaseUser user = mAuth.getCurrentUser();
+//        if (user != null){
+//            Intent i = new Intent(getApplicationContext(), MainActivity.class);
+//            startActivity(i);
+//            finish();
+//        }
+//    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,7 +76,6 @@ public class LoginActivity extends AppCompatActivity {
                     @Override
                     public void onSuccess(AuthResult authResult) {
                         progressBar.setVisibility(View.GONE);
-                        Toast.makeText(LoginActivity.this, "Đăng nhập thành công", Toast.LENGTH_SHORT).show();
                         checkUserAccessLevel(authResult.getUser().getUid());
                     }
                 }).addOnFailureListener(new OnFailureListener() {
@@ -104,22 +103,14 @@ public class LoginActivity extends AppCompatActivity {
         df.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
-                Log.d("Tag","Thành công: "+documentSnapshot.getData());
-                if (documentSnapshot.exists()) {
-                    Log.d("Tag", "Dữ liệu tài liệu: " + documentSnapshot.getData());
-
-                    // Tiếp tục xử lý dữ liệu
-                } else {
-                    Log.d("Tag", "Tài liệu không tồn tại");
-                }
-
-
                 if (documentSnapshot.getString("admin") != null){
+                    Toast.makeText(LoginActivity.this, "Đăng nhập thành công", Toast.LENGTH_SHORT).show();
                     Intent i = new Intent(getApplicationContext(),AdminActivity.class);
                     startActivity(i);
                     finish();
                 }
                 if (documentSnapshot.getString("isUser") != null){
+                    Toast.makeText(LoginActivity.this, "Đăng nhập thành công", Toast.LENGTH_SHORT).show();
                     Intent i = new Intent(getApplicationContext(),MainActivity.class);
                     startActivity(i);
                     finish();

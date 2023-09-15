@@ -31,13 +31,15 @@ public class CreateAdminActivity extends AppCompatActivity {
     Button btnAdmin;
     FirebaseAuth fAuth;
     FirebaseFirestore fstore;
-
+    final String EMAIL_VERIFI = "dakhuong281202@gmail.com";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_admin);
+
         anhxa();
         btnAdmin.setOnClickListener(new View.OnClickListener() {
+
             @Override
             public void onClick(View v) {
                 String email = emailAdmin.getText().toString().trim();
@@ -65,16 +67,27 @@ public class CreateAdminActivity extends AppCompatActivity {
                             @Override
                             public void onSuccess(AuthResult authResult) {
                                 FirebaseUser user = fAuth.getCurrentUser();
-                                Toast.makeText(CreateAdminActivity.this, "Đăng ký thành công", Toast.LENGTH_SHORT).show();
-                                DocumentReference df = fstore.collection("User").document(user.getUid());
-                                Map<String,Object> adminInfo = new HashMap<>();
-                                adminInfo.put("email",email);
-                                adminInfo.put("admin","0");
-                                df.set(adminInfo);
+                                if (user != null ) {
+                                    user.updateEmail(EMAIL_VERIFI).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                        @Override
+                                        public void onSuccess(Void unused) {
+                                            Toast.makeText(CreateAdminActivity.this, "Đăng ký thành công", Toast.LENGTH_SHORT).show();
+                                            DocumentReference df = fstore.collection("User").document(user.getUid());
+                                            Map<String, Object> adminInfo = new HashMap<>();
+                                            adminInfo.put("email", email);
+                                            adminInfo.put("admin", "0");
+                                            df.set(adminInfo);
 
-                                startActivity(new Intent(getApplicationContext(), AdminActivity.class));
-                                finish();
-
+                                            startActivity(new Intent(getApplicationContext(), AdminActivity.class));
+                                            finish();
+                                        }
+                                    }).addOnFailureListener(new OnFailureListener() {
+                                        @Override
+                                        public void onFailure(@NonNull Exception e) {
+                                            Toast.makeText(CreateAdminActivity.this, "Không thể gửi email xác nhật", Toast.LENGTH_SHORT).show();
+                                        }
+                                    });
+                                }
                             }
                         }).addOnFailureListener(new OnFailureListener() {
                             @Override
