@@ -17,6 +17,7 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.github.dhaval2404.imagepicker.ImagePicker;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -26,6 +27,8 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import khuonndph14998.fpoly.thuctapfpoly.model.Product;
 
@@ -37,7 +40,7 @@ public class CreateProductActivity extends AppCompatActivity {
     ImageView imageProduct;
     Button btnCreateProduct;
     ProgressBar progressBar;
-
+    Uri imageUri;
     String selectedItem;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,6 +70,7 @@ public class CreateProductActivity extends AppCompatActivity {
                 String quantityText = inputQuantity.getText().toString().trim();
                 String note = inputNote.getText().toString().trim();
                 String describe = inputDescribe.getText().toString().trim();
+
 
                 if (TextUtils.isEmpty(name)){
                     Toast.makeText(CreateProductActivity.this, "Không được để trống tên", Toast.LENGTH_SHORT).show();
@@ -100,11 +104,16 @@ public class CreateProductActivity extends AppCompatActivity {
                     Toast.makeText(CreateProductActivity.this, "Số lượng phải lớn hơn 0", Toast.LENGTH_SHORT).show();
                     return;
                 }
+                if (imageUri == null ){
+                    Toast.makeText(CreateProductActivity.this, "Vui lòng chọn ảnh", Toast.LENGTH_SHORT).show();
+                    return;
+                }
 
                 int quantity = Integer.parseInt(quantityText);
                 progressBar.setVisibility(View.VISIBLE);
 
-                Product product = new Product(name,code,quantity,note,describe,selectedItem);
+                Product product = new Product(name,code,quantity,note,describe,selectedItem,imageUri.toString());
+
                 DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("products");
 
                 databaseReference.orderByChild("code").equalTo(code)
@@ -122,6 +131,7 @@ public class CreateProductActivity extends AppCompatActivity {
                                                 public void onSuccess(Void unused) {
                                                     Toast.makeText(CreateProductActivity.this, "Thêm sản phẩm thành công", Toast.LENGTH_SHORT).show();
                                                     progressBar.setVisibility(View.GONE);
+                                                    clearForm();
                                                 }
                                             }).addOnFailureListener(new OnFailureListener() {
                                                 @Override
@@ -153,11 +163,17 @@ public class CreateProductActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        Uri uri = data.getData();
-        imageProduct.setImageURI(uri);
+        imageUri = data.getData();
+        imageProduct.setImageURI(imageUri);
     }
-
-
+    private void clearForm () {
+        inputName.setText("");
+        inputCode.setText("");
+        inputDescribe.setText("");
+        inputNote.setText("");
+        inputQuantity.setText("");
+        imageProduct.setImageResource(R.drawable.ic_baseline_image);
+    }
 
     private void anhxa() {
         inputName = findViewById(R.id.input_product_name);
