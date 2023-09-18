@@ -11,22 +11,32 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import khuonndph14998.fpoly.thuctapfpoly.R;
 import khuonndph14998.fpoly.thuctapfpoly.auth.LoginActivity;
 import khuonndph14998.fpoly.thuctapfpoly.fragmentadmin.ProductFragment;
 import khuonndph14998.fpoly.thuctapfpoly.fragmentadmin.UsersFragment;
+import khuonndph14998.fpoly.thuctapfpoly.model.Admin;
 
 public class AdminActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
-    DrawerLayout drawerLayout;
-    Toolbar toolbar;
+    private DrawerLayout drawerLayout;
+    private Toolbar toolbar;
     NavigationView navigationView;
     FirebaseAuth fAuth;
     FirebaseFirestore fstore;
@@ -104,7 +114,41 @@ public class AdminActivity extends AppCompatActivity implements NavigationView.O
     }
 
     private void deleteAccountAdmin() {
+        FirebaseAuth mAuth = FirebaseAuth.getInstance();
+        FirebaseUser user = mAuth.getCurrentUser();
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        String idAdminDocument = user.getUid();
+        db.collection("account").document(idAdminDocument)
+                .delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void unused) {
+                        Toast.makeText(getApplicationContext(), "Xóa thành công", Toast.LENGTH_SHORT).show();
+                            deleteAdmin();
+                            Intent i = new Intent(AdminActivity.this,LoginActivity.class);
+                            startActivity(i);
+                            finish();
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Toast.makeText(getApplicationContext(), "Xóa thất bại", Toast.LENGTH_SHORT).show();
+                    }
+                });
 
+    }
+    private void deleteAdmin(){
+        FirebaseAuth mAuth = FirebaseAuth.getInstance();
+        FirebaseUser user = mAuth.getCurrentUser();
+        user.delete().addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                if (task.isSuccessful()){
+                    Log.d("admin","Xóa thành công");
+                }else {
+                    Log.d("admin","Xóa thất bại"+task.getException().getMessage());
+                }
+            }
+        });
     }
 
     @Override

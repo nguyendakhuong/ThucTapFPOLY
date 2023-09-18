@@ -6,6 +6,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import android.os.Bundle;
+import android.widget.TextView;
 
 import khuonndph14998.fpoly.thuctapfpoly.databinding.ActivityMainBinding;
 import khuonndph14998.fpoly.thuctapfpoly.fragment.FavoriteFragment;
@@ -16,7 +17,6 @@ import khuonndph14998.fpoly.thuctapfpoly.fragment.SettingFragment;
 public class MainActivity extends AppCompatActivity {
 
     ActivityMainBinding mainBinding;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

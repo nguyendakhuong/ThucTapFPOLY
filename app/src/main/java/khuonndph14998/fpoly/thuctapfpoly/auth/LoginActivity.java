@@ -31,12 +31,12 @@ import khuonndph14998.fpoly.thuctapfpoly.admin.AdminActivity;
 
 public class LoginActivity extends AppCompatActivity {
 
-    TextInputEditText editTextEmail, editTextPassword;
-    Button btnLogin;
-    TextView textToRegister;
+    private TextInputEditText editTextEmail, editTextPassword;
+    private Button btnLogin;
+    private TextView textToRegister;
     FirebaseAuth mAuth;
     FirebaseFirestore fStore;
-    ProgressBar progressBar;
+    private ProgressBar progressBar;
 
 //    @Override
 //    protected void onStart() {
@@ -99,7 +99,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void checkUserAccessLevel(String uid) {
-        DocumentReference df = fStore.collection("User").document(uid);
+        DocumentReference df = fStore.collection("account").document(uid);
         df.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
@@ -109,7 +109,7 @@ public class LoginActivity extends AppCompatActivity {
                     startActivity(i);
                     finish();
                 }
-                if (documentSnapshot.getString("isUser") != null){
+                if (documentSnapshot.getString("user") != null){
                     Toast.makeText(LoginActivity.this, "Đăng nhập thành công", Toast.LENGTH_SHORT).show();
                     Intent i = new Intent(getApplicationContext(),MainActivity.class);
                     startActivity(i);

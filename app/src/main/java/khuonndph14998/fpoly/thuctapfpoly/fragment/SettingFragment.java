@@ -17,10 +17,11 @@ import khuonndph14998.fpoly.thuctapfpoly.R;
 import khuonndph14998.fpoly.thuctapfpoly.auth.LoginActivity;
 
 public class SettingFragment extends Fragment {
+    private Button logoutButton;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_setting, container, false);
-        Button logoutButton = view.findViewById(R.id.fragment_button_logout);
+        logoutButton = view.findViewById(R.id.fragment_button_logout);
         FirebaseAuth auth = FirebaseAuth.getInstance();
         FirebaseUser user = auth.getCurrentUser();
         if (user == null ){

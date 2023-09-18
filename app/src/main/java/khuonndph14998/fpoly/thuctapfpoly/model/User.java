@@ -1,16 +1,25 @@
 package khuonndph14998.fpoly.thuctapfpoly.model;
 
 public class User {
-    private String fullname , email ;
+    private String id, fullname , email ;
     private String phone ;
 
     public User() {
     }
 
-    public User(String fullname, String email, String phone) {
+    public User(String id, String fullname, String email, String phone) {
+        this.id = id;
         this.fullname = fullname;
         this.email = email;
         this.phone = phone;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getFullname() {

@@ -24,10 +24,10 @@ import khuonndph14998.fpoly.thuctapfpoly.R;
 
 
 public class HomeFragment extends Fragment {
-    Toolbar toolbar;
-    ImageView iconCart;
-    RecyclerView rclViewHome;
-    ViewFlipper viewFlipper;
+    private Toolbar toolbar;
+    private ImageView iconCart;
+    private RecyclerView rclViewHome;
+    private ViewFlipper viewFlipper;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {

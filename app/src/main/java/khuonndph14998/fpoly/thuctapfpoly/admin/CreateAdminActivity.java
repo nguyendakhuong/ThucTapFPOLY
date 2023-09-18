@@ -21,17 +21,17 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 import khuonndph14998.fpoly.thuctapfpoly.MainActivity;
 import khuonndph14998.fpoly.thuctapfpoly.R;
 import khuonndph14998.fpoly.thuctapfpoly.auth.RegisterActivity;
 
 public class CreateAdminActivity extends AppCompatActivity {
-    TextInputEditText emailAdmin,passwordAdmin;
-    Button btnAdmin;
+    private TextInputEditText emailAdmin,passwordAdmin;
+    private Button btnAdmin;
     FirebaseAuth fAuth;
     FirebaseFirestore fstore;
-    final String EMAIL_VERIFI = "dakhuong281202@gmail.com";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -45,6 +45,7 @@ public class CreateAdminActivity extends AppCompatActivity {
                 String email = emailAdmin.getText().toString().trim();
                 String password = passwordAdmin.getText().toString().trim();
                 String emailPattern = "^([a-zA-Z0-9_\\.\\-])+\\@(([a-zA-Z0-9\\-])+\\.)+([a-zA-Z0-9]{2,4})+$";
+                String id = UUID.randomUUID().toString();
 
                 if (TextUtils.isEmpty(email)){
                     Toast.makeText(CreateAdminActivity.this, "Nhập email", Toast.LENGTH_SHORT).show();
@@ -68,25 +69,15 @@ public class CreateAdminActivity extends AppCompatActivity {
                             public void onSuccess(AuthResult authResult) {
                                 FirebaseUser user = fAuth.getCurrentUser();
                                 if (user != null ) {
-                                    user.updateEmail(EMAIL_VERIFI).addOnSuccessListener(new OnSuccessListener<Void>() {
-                                        @Override
-                                        public void onSuccess(Void unused) {
-                                            Toast.makeText(CreateAdminActivity.this, "Đăng ký thành công", Toast.LENGTH_SHORT).show();
-                                            DocumentReference df = fstore.collection("User").document(user.getUid());
-                                            Map<String, Object> adminInfo = new HashMap<>();
-                                            adminInfo.put("email", email);
-                                            adminInfo.put("admin", "0");
-                                            df.set(adminInfo);
-
-                                            startActivity(new Intent(getApplicationContext(), AdminActivity.class));
-                                            finish();
-                                        }
-                                    }).addOnFailureListener(new OnFailureListener() {
-                                        @Override
-                                        public void onFailure(@NonNull Exception e) {
-                                            Toast.makeText(CreateAdminActivity.this, "Không thể gửi email xác nhật", Toast.LENGTH_SHORT).show();
-                                        }
-                                    });
+                                    Toast.makeText(CreateAdminActivity.this, "Đăng ký thành công", Toast.LENGTH_SHORT).show();
+                                    DocumentReference df = fstore.collection("account").document(user.getUid());
+                                    Map<String, Object> adminInfo = new HashMap<>();
+                                    adminInfo.put("email", email);
+                                    adminInfo.put("admin", "0");
+                                    adminInfo.put("id",id);
+                                    df.set(adminInfo);
+                                    startActivity(new Intent(getApplicationContext(), AdminActivity.class));
+                                    finish();
                                 }
                             }
                         }).addOnFailureListener(new OnFailureListener() {

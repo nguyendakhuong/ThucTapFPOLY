@@ -17,11 +17,6 @@
         android:layout_height="wrap_content"
         android:text="Online fashion shops"
         android:textSize="20dp"/>
-    <TextView
-        android:id="@+id/textEmailAdmin"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="admin@gmail.com" />
 
 
 </LinearLayout>

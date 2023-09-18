@@ -30,18 +30,19 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
+import khuonndph14998.fpoly.thuctapfpoly.databinding.FragmentProductBinding;
 import khuonndph14998.fpoly.thuctapfpoly.model.Product;
 
 public class CreateProductActivity extends AppCompatActivity {
-    String[] items = {"Bộ quần áo","Áo thun","Quần bò","Giày dép","Áo sơmi","Thắt lưng"};
+    private String[] items = {"Bộ quần áo","Áo thun","Quần bò","Giày dép","Áo sơmi","Thắt lưng"};
     AutoCompleteTextView autoCompleteTextView;
-    ArrayAdapter<String> adapterItem;
-    TextInputEditText inputName,inputCode,inputQuantity,inputNote,inputDescribe;
-    ImageView imageProduct;
-    Button btnCreateProduct;
-    ProgressBar progressBar;
-    Uri imageUri;
-    String selectedItem;
+    private ArrayAdapter<String> adapterItem;
+    private TextInputEditText inputName,inputCode,inputQuantity,inputNote,inputDescribe;
+    private ImageView imageProduct;
+    private Button btnCreateProduct;
+    private ProgressBar progressBar;
+    private Uri imageUri;
+    private String selectedItem;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -132,6 +133,9 @@ public class CreateProductActivity extends AppCompatActivity {
                                                     Toast.makeText(CreateProductActivity.this, "Thêm sản phẩm thành công", Toast.LENGTH_SHORT).show();
                                                     progressBar.setVisibility(View.GONE);
                                                     clearForm();
+                                                    Intent i = new Intent(CreateProductActivity.this, FragmentProductBinding.class);
+                                                    startActivity(i);
+                                                    finish();
                                                 }
                                             }).addOnFailureListener(new OnFailureListener() {
                                                 @Override

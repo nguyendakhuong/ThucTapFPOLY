@@ -3,11 +3,10 @@ package khuonndph14998.fpoly.thuctapfpoly.auth;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.telephony.PhoneNumberUtils;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ProgressBar;
@@ -25,28 +24,22 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
-import khuonndph14998.fpoly.thuctapfpoly.MainActivity;
 import khuonndph14998.fpoly.thuctapfpoly.R;
 import khuonndph14998.fpoly.thuctapfpoly.admin.CreateAdminActivity;
-import khuonndph14998.fpoly.thuctapfpoly.model.User;
-import khuonndph14998.fpoly.thuctapfpoly.model.UserDirectory;
 
 public class RegisterActivity extends AppCompatActivity {
 
-    TextInputEditText editTextEmail, editTextPassword,editTextComfirmPassword, editTextName , editTextPhone;
-    Button btnRegister;
-    TextView textToLogin,textAdmin;
+    private TextInputEditText editTextEmail, editTextPassword,editTextComfirmPassword, editTextName , editTextPhone;
+    private Button btnRegister;
+    private TextView textToLogin,textAdmin;
     FirebaseAuth fAuth;
     ProgressBar progressBar;
     FirebaseFirestore fstore;
-    CollectionReference usersCollectionRef;
 
 //    @Override
 //    protected void onStart() {
@@ -74,7 +67,7 @@ public class RegisterActivity extends AppCompatActivity {
                 String name = editTextName.getText().toString().trim();
                 String phone = editTextPhone.getText().toString().trim();
                 String EMAIL_REGEX = "^([a-zA-Z0-9_\\.\\-])+\\@(([a-zA-Z0-9\\-])+\\.)+([a-zA-Z0-9]{2,4})+$";
-
+                String id = UUID.randomUUID().toString();
 
                 if (TextUtils.isEmpty(email)){
                     Toast.makeText(RegisterActivity.this, "Nhập email", Toast.LENGTH_SHORT).show();
@@ -109,6 +102,7 @@ public class RegisterActivity extends AppCompatActivity {
                     return;
                 }
                 progressBar.setVisibility(View.VISIBLE);
+
                 fAuth.createUserWithEmailAndPassword(email, password)
                         .addOnSuccessListener(new OnSuccessListener<AuthResult>() {
                             @Override
@@ -133,21 +127,23 @@ public class RegisterActivity extends AppCompatActivity {
                             @Override
                             public void onFailure(@NonNull Exception e) {
                                 progressBar.setVisibility(View.GONE);
-                                Toast.makeText(RegisterActivity.this, "Đăng ký thất bại", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(RegisterActivity.this, "Tài khoản đã tồn tại", Toast.LENGTH_SHORT).show();
                             }
                         });
                 FirebaseAuth.getInstance().addIdTokenListener(new FirebaseAuth.IdTokenListener() {
                     @Override
                     public void onIdTokenChanged(@NonNull FirebaseAuth firebaseAuth) {
                         FirebaseUser user = firebaseAuth.getCurrentUser();
+
                         if (user != null && user.isEmailVerified()) {
                             // Người dùng đã xác thực email, lưu dữ liệu vào Firestore
-                            DocumentReference df = fstore.collection("User").document(user.getUid());
+                            DocumentReference df = fstore.collection("account").document(user.getUid());
                             Map<String, Object> userInfo = new HashMap<>();
+                            userInfo.put("id",id);
                             userInfo.put("email", email);
                             userInfo.put("fullname", name);
                             userInfo.put("phone", phone);
-                            userInfo.put("isUser", "1");
+                            userInfo.put("user", "1");
                             df.set(userInfo);
                             finish();
                         }
