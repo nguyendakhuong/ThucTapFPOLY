@@ -59,25 +59,30 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
         holder.textView_code.setText(p.getCode());
         holder.imageView_product.setImageURI(uri);
         holder.itemView.setOnClickListener(v -> productListener.onItemClickProduct(productArrayList.get(position)));
-        holder.iconDelete.setOnClickListener( v -> {
-            new AlertDialog.Builder(v.getContext())
-                    .setTitle("Thông báo")
-                    .setMessage("Bản có chắc muốn xóa sản phẩm này không")
-                    .setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            FirebaseDatabase fb = FirebaseDatabase.getInstance();
-                            DatabaseReference db = fb.getReference("products");
-                            db.child(String.valueOf(p.getCode())).removeValue(new DatabaseReference.CompletionListener() {
-                                @Override
-                                public void onComplete(@Nullable DatabaseError error, @NonNull DatabaseReference ref) {
-                                    Toast.makeText(mContext, "Xóa thành công", Toast.LENGTH_SHORT).show();
-                                }
-                            });
-                        }
-                    }).setNegativeButton("Cancel",null)
-                    .show();
-        });
+//        holder.iconDelete.setOnClickListener( v -> {
+//            new AlertDialog.Builder(v.getContext())
+//                    .setTitle("Thông báo")
+//                    .setMessage("Bản có chắc muốn xóa sản phẩm này không")
+//                    .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+//                        @Override
+//                        public void onClick(DialogInterface dialog, int which) {
+//                            FirebaseDatabase fb = FirebaseDatabase.getInstance();
+//                            DatabaseReference db = fb.getReference("products").child(id);
+//                            db.removeValue().addOnSuccessListener(new OnSuccessListener<Void>() {
+//                                @Override
+//                                public void onSuccess(Void unused) {
+//                                    Toast.makeText(mContext, "Xóa thành công", Toast.LENGTH_SHORT).show();
+//                                }
+//                            }).addOnFailureListener(new OnFailureListener() {
+//                                @Override
+//                                public void onFailure(@NonNull Exception e) {
+//                                    Toast.makeText(mContext, "Xóa thất bại", Toast.LENGTH_SHORT).show();
+//                                }
+//                            });
+//                        }
+//                    }).setNegativeButton("Cancel",null)
+//                    .show();
+//        });
     }
 
     @Override
@@ -88,7 +93,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
     public static class ProductViewHolder extends RecyclerView.ViewHolder {
 
         private TextView textView_name, textView_code, textView_describe, textView_note, textView_quantity, textView_selectedItem;
-        private ImageView iconDelete, imageView_product;
+        private ImageView imageView_product;
 
         public ProductViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -96,7 +101,6 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
             textView_name = itemView.findViewById(R.id.item_textView_name);
             textView_selectedItem = itemView.findViewById(R.id.item_textView_category);
             textView_quantity = itemView.findViewById(R.id.item_textView_quantity);
-            iconDelete = itemView.findViewById(R.id.item_product_delete);
             imageView_product = itemView.findViewById(R.id.item_product_image);
             textView_code = itemView.findViewById(R.id.item_textView_code);
 

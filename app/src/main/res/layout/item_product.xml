@@ -5,8 +5,7 @@
     android:layout_height="wrap_content">
     <LinearLayout
         android:layout_marginTop="10dp"
-        android:layout_width="0dp"
-        android:layout_weight="1"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         >
@@ -79,12 +78,6 @@
                     android:layout_marginLeft="5dp"/>
             </LinearLayout>
         </LinearLayout>
-
     </LinearLayout>
-    <ImageView
-        android:id="@+id/item_product_delete"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/ic_baseline_delete"/>
 
 </LinearLayout>
