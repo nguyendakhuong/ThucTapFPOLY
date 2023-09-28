@@ -18,6 +18,14 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
+            android:name=".UpdateProductActivity"
+            android:theme="@style/Theme.MaterialComponents.DayNight"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
             android:name=".detail.AdminProductDetailActivity"
             android:exported="false">
             <meta-data

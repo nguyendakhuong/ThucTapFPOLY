@@ -59,6 +59,17 @@
                     android:layout_height="wrap_content"
                     android:text="10000"
                     android:layout_marginLeft="5dp"/>
+                <TextView
+                    android:layout_marginLeft="20dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Giá:"/>
+                <TextView
+                    android:id="@+id/item_textView_price"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="10000"
+                    android:layout_marginLeft="5dp"/>
             </LinearLayout>
 
             <LinearLayout

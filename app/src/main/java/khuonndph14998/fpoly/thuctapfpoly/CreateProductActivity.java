@@ -37,7 +37,7 @@ public class CreateProductActivity extends AppCompatActivity {
     private String[] items = {"Bộ quần áo","Áo thun","Quần bò","Giày dép","Áo sơmi","Thắt lưng"};
     AutoCompleteTextView autoCompleteTextView;
     private ArrayAdapter<String> adapterItem;
-    private TextInputEditText inputName,inputCode,inputQuantity,inputNote,inputDescribe;
+    private TextInputEditText inputName,inputCode,inputQuantity,inputNote,inputDescribe,inputPrice;
     private ImageView imageProduct;
     private Button btnCreateProduct;
     private ProgressBar progressBar;
@@ -71,87 +71,76 @@ public class CreateProductActivity extends AppCompatActivity {
                 String quantityText = inputQuantity.getText().toString().trim();
                 String note = inputNote.getText().toString().trim();
                 String describe = inputDescribe.getText().toString().trim();
+                String priceText = inputPrice.getText().toString().trim();
 
 
-                if (TextUtils.isEmpty(name)){
-                    Toast.makeText(CreateProductActivity.this, "Không được để trống tên", Toast.LENGTH_SHORT).show();
-                    return ;
-                }
-                if (TextUtils.isEmpty(code)){
-                    Toast.makeText(CreateProductActivity.this, "không được để trống mã", Toast.LENGTH_SHORT).show();
+                if (TextUtils.isEmpty(name) || TextUtils.isEmpty(code) || TextUtils.isEmpty(quantityText) ||
+                        TextUtils.isEmpty(priceText) || TextUtils.isEmpty(describe) || TextUtils.isEmpty(note)) {
+                    Toast.makeText(CreateProductActivity.this, "Vui lòng điền đầy đủ thông tin", Toast.LENGTH_SHORT).show();
                     return;
                 }
-                if (TextUtils.isEmpty(note)){
-                    Toast.makeText(CreateProductActivity.this, "không được để trống ghi chú", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-                if (TextUtils.isEmpty(describe)){
-                    Toast.makeText(CreateProductActivity.this, "không được để trống mô tả", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-                if (TextUtils.isEmpty(quantityText)){
-                    Toast.makeText(CreateProductActivity.this, "không được để trống mã", Toast.LENGTH_SHORT).show();
-                    return;
-                }
+
                 if (!TextUtils.isDigitsOnly(quantityText)) {
                     Toast.makeText(CreateProductActivity.this, "Số lượng phải là một số", Toast.LENGTH_SHORT).show();
                     return;
                 }
-                if (selectedItem == null) {
-                    Toast.makeText(CreateProductActivity.this, "Bạn phải chọn một mục", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-                if (quantityText.equals("0")) {
+
+                int quantity = Integer.parseInt(quantityText);
+                int price = Integer.parseInt(priceText);
+
+                if (quantity <= 0) {
                     Toast.makeText(CreateProductActivity.this, "Số lượng phải lớn hơn 0", Toast.LENGTH_SHORT).show();
                     return;
                 }
-                if (imageUri == null ){
+
+                if (selectedItem == null) {
+                    Toast.makeText(CreateProductActivity.this, "Bạn phải chọn một mục trong thể loại", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                if (imageUri == null) {
                     Toast.makeText(CreateProductActivity.this, "Vui lòng chọn ảnh", Toast.LENGTH_SHORT).show();
                     return;
                 }
 
-                int quantity = Integer.parseInt(quantityText);
                 progressBar.setVisibility(View.VISIBLE);
-
-                Product product = new Product(name,code,quantity,note,describe,selectedItem,imageUri.toString());
-
+                Product product = new Product(name, code, quantity, note, describe, selectedItem, imageUri.toString(),price);
                 DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("products");
+                databaseReference.orderByChild("code").equalTo(code).addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        if (snapshot.exists()) {
+                            Toast.makeText(CreateProductActivity.this, "Sản phẩm đã tồn tại", Toast.LENGTH_SHORT).show();
+                            progressBar.setVisibility(View.GONE);
+                        } else {
+                            String productId = String.valueOf(product.getCode());
+                            databaseReference.child(productId).setValue(product)
+                                    .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                        @Override
+                                        public void onSuccess(Void unused) {
+                                            Toast.makeText(CreateProductActivity.this, "Thêm sản phẩm thành công", Toast.LENGTH_SHORT).show();
+                                            progressBar.setVisibility(View.GONE);
+                                            clearForm();
+//                                            Intent i = new Intent(CreateProductActivity.this, FragmentProductBinding.class);
+//                                            startActivity(i);
+//                                            finish();
+                                        }
+                                    }).addOnFailureListener(new OnFailureListener() {
+                                        @Override
+                                        public void onFailure(@NonNull Exception e) {
+                                            progressBar.setVisibility(View.GONE);
+                                            Toast.makeText(CreateProductActivity.this, "Thêm sản phẩm thất bại", Toast.LENGTH_SHORT).show();
+                                        }
+                                    });
+                        }
+                    }
 
-                databaseReference.orderByChild("code").equalTo(code)
-                        .addListenerForSingleValueEvent(new ValueEventListener() {
-                            @Override
-                            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                                if (snapshot.exists()){
-                                    Toast.makeText(CreateProductActivity.this, "Sản phẩm đã tồn tại", Toast.LENGTH_SHORT).show();
-                                    progressBar.setVisibility(View.GONE);
-                                }else {
-                                    String productId = databaseReference.push().getKey();
-                                    databaseReference.child(productId).setValue(product)
-                                            .addOnSuccessListener(new OnSuccessListener<Void>() {
-                                                @Override
-                                                public void onSuccess(Void unused) {
-                                                    Toast.makeText(CreateProductActivity.this, "Thêm sản phẩm thành công", Toast.LENGTH_SHORT).show();
-                                                    progressBar.setVisibility(View.GONE);
-                                                    clearForm();
-                                                    Intent i = new Intent(CreateProductActivity.this, FragmentProductBinding.class);
-                                                    startActivity(i);
-                                                    finish();
-                                                }
-                                            }).addOnFailureListener(new OnFailureListener() {
-                                                @Override
-                                                public void onFailure(@NonNull Exception e) {
-                                                    progressBar.setVisibility(View.GONE);
-                                                    Toast.makeText(CreateProductActivity.this, "Thêm sản phẩm thất bại", Toast.LENGTH_SHORT).show();
-                                                }
-                                            });
-                                }
-                            }
-
-                            @Override
-                            public void onCancelled(@NonNull DatabaseError error) {
-                                Toast.makeText(CreateProductActivity.this, "Lỗi: " + error.getMessage(), Toast.LENGTH_SHORT).show();
-                                progressBar.setVisibility(View.GONE);
-                            }});
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+                        Toast.makeText(CreateProductActivity.this, "Lỗi: " + error.getMessage(), Toast.LENGTH_SHORT).show();
+                        progressBar.setVisibility(View.GONE);
+                    }
+                });
             }
         });
     }
@@ -176,6 +165,7 @@ public class CreateProductActivity extends AppCompatActivity {
         inputDescribe.setText("");
         inputNote.setText("");
         inputQuantity.setText("");
+        inputPrice.setText("");
         imageProduct.setImageResource(R.drawable.ic_baseline_image);
     }
 
@@ -185,6 +175,7 @@ public class CreateProductActivity extends AppCompatActivity {
         inputQuantity = findViewById(R.id.input_product_quantity);
         inputNote = findViewById(R.id.input_product_note);
         inputDescribe = findViewById(R.id.input_product_describe);
+        inputPrice = findViewById(R.id.input_product_price);
         imageProduct = findViewById(R.id.imageView_product);
         btnCreateProduct = findViewById(R.id.btnCreateProduct);
         autoCompleteTextView = findViewById(R.id.auto_complete);

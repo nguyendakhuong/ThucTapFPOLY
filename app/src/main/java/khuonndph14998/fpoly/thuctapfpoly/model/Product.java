@@ -1,5 +1,8 @@
 package khuonndph14998.fpoly.thuctapfpoly.model;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class Product {
     private String name;
     private String code;
@@ -8,11 +11,12 @@ public class Product {
     private String describe;
     private String selectedItem;
     private String image;
+    private int price;
 
     public Product() {
     }
 
-    public Product(String name, String code, int quantity, String note, String describe, String selectedItem, String image) {
+    public Product(String name, String code, int quantity, String note, String describe, String selectedItem, String image, int price) {
         this.name = name;
         this.code = code;
         this.quantity = quantity;
@@ -20,6 +24,7 @@ public class Product {
         this.describe = describe;
         this.selectedItem = selectedItem;
         this.image = image;
+        this.price = price;
     }
 
     public String getName() {
@@ -76,5 +81,13 @@ public class Product {
 
     public void setImage(String image) {
         this.image = image;
+    }
+
+    public int getPrice() {
+        return price;
+    }
+
+    public void setPrice(int price) {
+        this.price = price;
     }
 }

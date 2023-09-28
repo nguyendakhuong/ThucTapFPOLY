@@ -113,6 +113,7 @@ public class ProductFragment extends Fragment implements ItemProductListener {
         bundle.putString("describe",product.getDescribe());
         bundle.putString("note",product.getNote());
         bundle.putInt("quantity",product.getQuantity());
+        bundle.putInt("price",product.getPrice());
         bundle.putString("image",product.getImage());
         bundle.putString("selectedItem",product.getSelectedItem());
         i.putExtras(bundle);
