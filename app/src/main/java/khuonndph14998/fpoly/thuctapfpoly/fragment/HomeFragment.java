@@ -55,7 +55,6 @@ public class HomeFragment extends Fragment {
         viewFlipper.setOutAnimation(slide_out);
 
 
-
         return view;
     }
 }
