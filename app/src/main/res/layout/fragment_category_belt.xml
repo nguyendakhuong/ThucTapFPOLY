@@ -3,12 +3,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".fragment.FavoriteFragment">
-    
-    <androidx.recyclerview.widget.RecyclerView
-        android:layout_width="match_parent"
+    android:background="@color/teal_700"
+    tools:context=".fragmentCategory.CategoryBeltFragment">
+
+    <!-- TODO: Update blank fragment layout -->
+    <TextView
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/recv_fav"
-        android:paddingBottom="?attr/actionBarSize"
-        android:clipToPadding="false"/>
+        android:text="belt" />
+
 </FrameLayout>
