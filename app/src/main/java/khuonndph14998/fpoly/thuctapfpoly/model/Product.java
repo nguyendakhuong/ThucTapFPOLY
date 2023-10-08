@@ -12,11 +12,12 @@ public class Product {
     private String selectedItem;
     private String image;
     private int price;
+    private String favStatus;
 
     public Product() {
     }
 
-    public Product(String name, String code, int quantity, String note, String describe, String selectedItem, String image, int price) {
+    public Product( String name, String code, int quantity, String note, String describe, String selectedItem, String image, int price, String favStatus) {
         this.name = name;
         this.code = code;
         this.quantity = quantity;
@@ -25,6 +26,15 @@ public class Product {
         this.selectedItem = selectedItem;
         this.image = image;
         this.price = price;
+        this.favStatus = favStatus;
+    }
+
+    public String getFavStatus() {
+        return favStatus;
+    }
+
+    public void setFavStatus(String favStatus) {
+        this.favStatus = favStatus;
     }
 
     public String getName() {

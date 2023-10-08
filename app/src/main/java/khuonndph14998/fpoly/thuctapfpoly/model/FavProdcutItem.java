@@ -1,7 +1,6 @@
 package khuonndph14998.fpoly.thuctapfpoly.model;
 
 public class FavProdcutItem {
-    private String key_id;
     private String name;
     private String code;
     private int quantity;
@@ -14,8 +13,7 @@ public class FavProdcutItem {
     public FavProdcutItem() {
     }
 
-    public FavProdcutItem(String key_id, String name, String code, int quantity, String note, String describe, String selectedItem, String image, int price) {
-        this.key_id = key_id;
+    public FavProdcutItem( String name, String code, int quantity, String note, String describe, String selectedItem, String image, int price) {
         this.name = name;
         this.code = code;
         this.quantity = quantity;
@@ -24,14 +22,6 @@ public class FavProdcutItem {
         this.selectedItem = selectedItem;
         this.image = image;
         this.price = price;
-    }
-
-    public String getKey_id() {
-        return key_id;
-    }
-
-    public void setKey_id(String key_id) {
-        this.key_id = key_id;
     }
 
     public String getName() {

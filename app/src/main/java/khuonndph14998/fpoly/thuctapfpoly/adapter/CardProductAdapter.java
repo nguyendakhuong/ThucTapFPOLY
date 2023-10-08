@@ -1,6 +1,9 @@
 package khuonndph14998.fpoly.thuctapfpoly.adapter;
 
 import android.content.Context;
+import android.content.SharedPreferences;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -66,6 +70,13 @@ public class CardProductAdapter extends RecyclerView.Adapter<CardProductAdapter.
             imageView_product = itemView.findViewById(R.id.imageView_cardProduct);
             btnCardProduct = itemView.findViewById(R.id.btnCardProduct);
             btnFavorite = itemView.findViewById(R.id.btnFavorite);
+
+            btnFavorite.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    btnFavorite.setBackgroundResource(R.drawable.ic_baseline_product_favorite);
+                }
+            });
         }
     }
 }

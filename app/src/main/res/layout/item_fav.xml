@@ -59,7 +59,7 @@
         android:background="@drawable/ic_baseline_product_favorite"
         android:layout_gravity="end|center"
         android:layout_marginEnd="8dp"
-        android:id="@+id/btn_Favorite"/>
+        android:id="@+id/btnFavorite"/>
 
 
 </androidx.cardview.widget.CardView>
