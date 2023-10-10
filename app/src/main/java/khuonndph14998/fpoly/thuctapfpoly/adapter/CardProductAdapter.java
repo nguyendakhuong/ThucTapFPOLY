@@ -16,16 +16,28 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
 import java.util.ArrayList;
 
+import khuonndph14998.fpoly.thuctapfpoly.CreateProductActivity;
 import khuonndph14998.fpoly.thuctapfpoly.R;
 import khuonndph14998.fpoly.thuctapfpoly.listener.ItemProductListener;
 import khuonndph14998.fpoly.thuctapfpoly.model.Product;
 
-public class CardProductAdapter extends RecyclerView.Adapter<CardProductAdapter.CardProductViewHolder>{
+public class CardProductAdapter extends RecyclerView.Adapter<CardProductAdapter.CardProductViewHolder> {
     private Context mContext;
     private ArrayList<Product> productArrayList;
     private ItemProductListener cardProductListener;
+    FirebaseUser user;
 
     public CardProductAdapter(Context mContext, ArrayList<Product> productArrayList, ItemProductListener cardProductListener) {
         this.mContext = mContext;
@@ -36,7 +48,7 @@ public class CardProductAdapter extends RecyclerView.Adapter<CardProductAdapter.
     @NonNull
     @Override
     public CardProductAdapter.CardProductViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(mContext).inflate(R.layout.card_product,parent,false);
+        View v = LayoutInflater.from(mContext).inflate(R.layout.card_product, parent, false);
         return new CardProductViewHolder(v);
     }
 
@@ -58,9 +70,10 @@ public class CardProductAdapter extends RecyclerView.Adapter<CardProductAdapter.
     }
 
     public class CardProductViewHolder extends RecyclerView.ViewHolder {
-        private TextView textView_name, textView_describe,text_Price;
+        private TextView textView_name, textView_describe, text_Price;
         private ImageView imageView_product;
-        private Button btnCardProduct,btnFavorite;
+        private Button btnCardProduct, btnFavorite;
+
         public CardProductViewHolder(@NonNull View itemView) {
             super(itemView);
 
@@ -75,6 +88,59 @@ public class CardProductAdapter extends RecyclerView.Adapter<CardProductAdapter.
                 @Override
                 public void onClick(View v) {
                     btnFavorite.setBackgroundResource(R.drawable.ic_baseline_product_favorite);
+                }
+            });
+            btnCardProduct.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Product product = productArrayList.get(getAdapterPosition());
+                    String productCode = product.getCode();
+                    saveProductCodeToDatabase(productCode);
+                }
+            });
+        }
+    }
+    private String getCurrentUserEmail() {
+        FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
+        if (currentUser != null) {
+
+            return currentUser.getEmail();
+        } else {
+            return null;
+        }
+    }
+
+    private void saveProductCodeToDatabase(String productCode) {
+        String userEmail = getCurrentUserEmail();
+        if (userEmail != null) {
+            String emailPath = userEmail.replace("@gmail.com", "");
+            String databasePath = emailPath + "/productCodes";
+
+            DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference(databasePath);
+            databaseReference.child(productCode).addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    if (dataSnapshot.exists()) {
+                        Toast.makeText(mContext, "Sản phẩm Đã có trong giỏ hàng", Toast.LENGTH_SHORT).show();
+                    } else {
+                        databaseReference.child(productCode).setValue(productCode)
+                                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                    @Override
+                                    public void onSuccess(Void aVoid) {
+                                        Toast.makeText(mContext, "Thêm vào giỏ hàng thành công", Toast.LENGTH_SHORT).show();
+                                    }
+                                })
+                                .addOnFailureListener(new OnFailureListener() {
+                                    @Override
+                                    public void onFailure(@NonNull Exception e) {
+                                        Toast.makeText(mContext, "Thêm vào giỏ hàng thất bại", Toast.LENGTH_SHORT).show();
+                                    }
+                                });
+                    }
+                }
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+                    Toast.makeText(mContext, "Lỗi máy chủ", Toast.LENGTH_SHORT).show();
                 }
             });
         }

@@ -5,8 +5,6 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".fragment.HomeFragment">
-
-    <!-- TODO: Update blank fragment layout -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -17,13 +15,18 @@
             android:layout_height="?attr/actionBarSize"
             app:title="Trang chủ"
             android:background="#ff00dfff">
-                <ImageView
-                    android:id="@+id/icon_cart"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/ic_baseline_shopping_cart"
-                    android:layout_gravity="end"
-                    android:layout_marginRight="10dp"/>
+            <TextView
+                android:id="@+id/icon_cart"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:text="0"
+                android:background="@drawable/ic_baseline_shopping_cart"
+                android:textColor="#FF0D0D"
+                android:paddingHorizontal="15dp"
+                android:layout_gravity="end"
+                android:textStyle="bold"
+                android:textSize="20dp"/>
+
         </androidx.appcompat.widget.Toolbar>
         <ViewFlipper
             android:id="@+id/viewFlipper"

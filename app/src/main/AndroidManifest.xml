@@ -18,9 +18,23 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
-            android:name=".UpdateProductActivity"
-            android:theme="@style/Theme.MaterialComponents.DayNight"
+            android:name=".CardProductActivity"
             android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
+            android:name=".detail.UserProductDetailActivity"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
+            android:name=".UpdateProductActivity"
+            android:exported="false"
+            android:theme="@style/Theme.MaterialComponents.DayNight">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
@@ -44,8 +58,6 @@
             android:name=".admin.AdminActivity"
             android:exported="true"
             android:theme="@style/Theme.AppCompat.DayNight.NoActionBar">
-
-
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
@@ -72,6 +84,7 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />

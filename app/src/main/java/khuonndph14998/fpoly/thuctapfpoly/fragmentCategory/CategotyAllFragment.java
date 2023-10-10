@@ -1,7 +1,9 @@
 package khuonndph14998.fpoly.thuctapfpoly.fragmentCategory;
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -16,19 +18,23 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.google.common.reflect.TypeToken;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.gson.Gson;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 
 import khuonndph14998.fpoly.thuctapfpoly.R;
 import khuonndph14998.fpoly.thuctapfpoly.adapter.CardProductAdapter;
 import khuonndph14998.fpoly.thuctapfpoly.adapter.ProductAdapter;
 import khuonndph14998.fpoly.thuctapfpoly.detail.AdminProductDetailActivity;
+import khuonndph14998.fpoly.thuctapfpoly.detail.UserProductDetailActivity;
 import khuonndph14998.fpoly.thuctapfpoly.listener.ItemProductListener;
 import khuonndph14998.fpoly.thuctapfpoly.model.Product;
 
@@ -93,9 +99,8 @@ public class CategotyAllFragment extends Fragment implements ItemProductListener
     @Override
     public void onItemClickProduct(Product product) {
         Bundle bundle = new Bundle();
-        Intent i = new Intent(getContext(), AdminProductDetailActivity.class);
+        Intent i = new Intent(getContext(), UserProductDetailActivity.class);
         bundle.putString("name",product.getName());
-        bundle.putString("code",product.getCode());
         bundle.putString("describe",product.getDescribe());
         bundle.putString("note",product.getNote());
         bundle.putInt("quantity",product.getQuantity());
@@ -105,4 +110,5 @@ public class CategotyAllFragment extends Fragment implements ItemProductListener
         i.putExtras(bundle);
         startActivity(i);
     }
+
 }
