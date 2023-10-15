@@ -76,7 +76,7 @@ public class CardProductActivity extends AppCompatActivity implements QuantityCh
         String userEmail = getCurrentUserEmail();
         if (userEmail != null) {
             String emailPath = userEmail.replace("@gmail.com", "");
-            String databasePath = emailPath + "/productCodes";
+            String databasePath ="/Users/"+ emailPath + "/productCodes";
             DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference(databasePath);
             databaseReference.addValueEventListener(new ValueEventListener() {
                 @Override
@@ -130,7 +130,6 @@ public class CardProductActivity extends AppCompatActivity implements QuantityCh
 
     @Override
     public void onIncrease(int position) {
-        Log.d("TAG", "onIncrease: "+ quantity);
         quantity++;
         currentPosition = position;
         updateQuantityTextView();

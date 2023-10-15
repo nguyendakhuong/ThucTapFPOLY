@@ -1,10 +1,8 @@
 package khuonndph14998.fpoly.thuctapfpoly.adapter;
 
 import android.content.Context;
-import android.content.SharedPreferences;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +14,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.gms.dynamic.IFragmentWrapper;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
@@ -27,8 +26,10 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
-import khuonndph14998.fpoly.thuctapfpoly.CreateProductActivity;
 import khuonndph14998.fpoly.thuctapfpoly.R;
 import khuonndph14998.fpoly.thuctapfpoly.listener.ItemProductListener;
 import khuonndph14998.fpoly.thuctapfpoly.model.Product;
@@ -37,6 +38,8 @@ public class CardProductAdapter extends RecyclerView.Adapter<CardProductAdapter.
     private Context mContext;
     private ArrayList<Product> productArrayList;
     private ItemProductListener cardProductListener;
+    private ArrayList<Product> arrayList = new ArrayList<>();
+    private List<String> productCodeList = new ArrayList<>();
     FirebaseUser user;
 
     public CardProductAdapter(Context mContext, ArrayList<Product> productArrayList, ItemProductListener cardProductListener) {
@@ -55,6 +58,10 @@ public class CardProductAdapter extends RecyclerView.Adapter<CardProductAdapter.
     @Override
     public void onBindViewHolder(@NonNull CardProductAdapter.CardProductViewHolder holder, int position) {
         Product p = productArrayList.get(position);
+        String userEmail = getCurrentUserEmail();
+        String emailPath = userEmail.replace("@gmail.com", "");
+        String databasePath ="/Users/"+ emailPath + "/productCodes";
+        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference(databasePath);
         String urlString = p.getImage();
         Uri uri = Uri.parse(urlString);
         holder.textView_name.setText(p.getName());
@@ -62,6 +69,16 @@ public class CardProductAdapter extends RecyclerView.Adapter<CardProductAdapter.
         holder.text_Price.setText(String.valueOf(p.getPrice()));
         holder.textView_describe.setText(p.getDescribe());
         holder.itemView.setOnClickListener(v -> cardProductListener.onItemClickProduct(productArrayList.get(position)));
+        holder.btnFavorite.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String productCode = p.getCode();
+                saveFavProductToDatabase(productCode);
+                getCode(holder,productCode,productCodeList);
+                updateBtnFavoriteState(holder, productCode,databaseReference);
+
+            }
+        });
     }
 
     @Override
@@ -84,18 +101,13 @@ public class CardProductAdapter extends RecyclerView.Adapter<CardProductAdapter.
             btnCardProduct = itemView.findViewById(R.id.btnCardProduct);
             btnFavorite = itemView.findViewById(R.id.btnFavorite);
 
-            btnFavorite.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    btnFavorite.setBackgroundResource(R.drawable.ic_baseline_product_favorite);
-                }
-            });
             btnCardProduct.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     Product product = productArrayList.get(getAdapterPosition());
                     String productCode = product.getCode();
                     saveProductCodeToDatabase(productCode);
+
                 }
             });
         }
@@ -114,7 +126,7 @@ public class CardProductAdapter extends RecyclerView.Adapter<CardProductAdapter.
         String userEmail = getCurrentUserEmail();
         if (userEmail != null) {
             String emailPath = userEmail.replace("@gmail.com", "");
-            String databasePath = emailPath + "/productCodes";
+            String databasePath ="/Users/"+ emailPath + "/productCodes";
 
             DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference(databasePath);
             databaseReference.child(productCode).addListenerForSingleValueEvent(new ValueEventListener() {
@@ -144,5 +156,71 @@ public class CardProductAdapter extends RecyclerView.Adapter<CardProductAdapter.
                 }
             });
         }
+    }
+    private void saveFavProductToDatabase(String productCode) {
+        String userEmail = getCurrentUserEmail();
+        if (userEmail != null) {
+            String emailPath = userEmail.replace("@gmail.com", "");
+            String databasePath ="/Users/"+ emailPath + "/FavProduct";
+            DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference(databasePath);
+            Map<String, Object> favData = new HashMap<>();
+            favData.put("productCode", productCode);
+            databaseReference.child(productCode).setValue(favData)
+                    .addOnSuccessListener(new OnSuccessListener<Void>() {
+                        @Override
+                        public void onSuccess(Void unused) {
+                            Toast.makeText(mContext, "Thêm vào danh sách yêu thích thành công", Toast.LENGTH_SHORT).show();
+                        }
+                    }).addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            Toast.makeText(mContext, "Lỗi", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+        }
+    }
+    private void getCode(CardProductAdapter.CardProductViewHolder holder, String productCode, List<String> productCodeList) {
+        String userEmail = getCurrentUserEmail();
+        if (userEmail != null) {
+            String emailPath = userEmail.replace("@gmail.com", "");
+            String databasePath ="/Users/"+ emailPath + "/FavProduct";
+            DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference(databasePath);
+            databaseReference.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    List<String> productCodeList = new ArrayList<>();
+                    for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                        String productCode = snapshot.getKey();
+                        productCodeList.add(productCode);
+                    }
+                    updateBtnFavoriteState(holder, productCode, databaseReference);
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+                }
+            });
+
+        }
+    }
+    private void updateBtnFavoriteState(CardProductAdapter.CardProductViewHolder holder, String productCode, DatabaseReference databaseRef) {
+        Log.d("Tag",productCode);
+        databaseRef.child(productCode).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()) {
+                    holder.btnFavorite.setEnabled(false);
+                    holder.btnFavorite.setBackgroundResource(R.drawable.ic_baseline_product_favorite);
+                } else {
+                    holder.btnFavorite.setEnabled(true);
+                    holder.btnFavorite.setBackgroundResource(R.drawable.ic_baseline_favorite_border);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                // Xử lý lỗi nếu cần
+            }
+        });
     }
 }

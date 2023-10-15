@@ -2,17 +2,16 @@ package khuonndph14998.fpoly.thuctapfpoly.adapter;
 
 import android.content.Context;
 import android.net.Uri;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.gms.tasks.OnFailureListener;
@@ -23,18 +22,13 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
 import khuonndph14998.fpoly.thuctapfpoly.R;
-import khuonndph14998.fpoly.thuctapfpoly.listener.QuantityChangeListener;
 import khuonndph14998.fpoly.thuctapfpoly.model.Product;
 
-public class CardPayAdapter extends RecyclerView.Adapter<CardPayAdapter.CardPayViewHolder>{
-
+public class FavAdapter extends RecyclerView.Adapter<FavAdapter.FavViewHolder>  {
     private Context mContext;
     private ArrayList<Product> productArrayList;
-    private QuantityChangeListener quantityChangeListener;
-    int number = 1;
 
     private String getCurrentUserEmail() {
         FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
@@ -46,59 +40,41 @@ public class CardPayAdapter extends RecyclerView.Adapter<CardPayAdapter.CardPayV
     }
 
 
-    public CardPayAdapter(Context mContext, ArrayList<Product> productArrayList, QuantityChangeListener quantityChangeListener) {
+    public FavAdapter(Context mContext, ArrayList<Product> productArrayList) {
         this.mContext = mContext;
         this.productArrayList = productArrayList;
-        this.quantityChangeListener = quantityChangeListener;
     }
 
     @NonNull
     @Override
-    public CardPayAdapter.CardPayViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(mContext).inflate(R.layout.card_pay_product,parent,false);
-        return new CardPayViewHolder(v);
+    public FavAdapter.FavViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        View v = LayoutInflater.from(mContext).inflate(R.layout.item_fav,parent,false);
+        return new FavViewHolder(v);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull CardPayAdapter.CardPayViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull FavAdapter.FavViewHolder holder, int position) {
         Product p = productArrayList.get(position);
         String userEmail = getCurrentUserEmail();
         String urlString = p.getImage();
         Uri uri = Uri.parse(urlString);
-        holder.tv_cardName.setText(p.getName());
-        holder.cardImage.setImageURI(uri);
-        holder.tv_cardPrice.setText(String.valueOf(p.getPrice()));
+        holder.nameFav.setText(p.getName());
+        holder.imageFav.setImageURI(uri);
+        holder.priceFav.setText(String.valueOf(p.getPrice()));
+        holder.describeFav.setText(p.getDescribe());
 
-        holder.btnAdd.setOnClickListener(new View.OnClickListener() {
+        holder.btnFav.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (quantityChangeListener != null) {
-                    quantityChangeListener.onIncrease(position);
-                }
-            }
-        });
-
-        holder.btnApart.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (quantityChangeListener != null) {
-                    quantityChangeListener.onDecrease(position);
-                }
-            }
-        });
-        holder.tv_cardNumber.setText(String.valueOf(number));
-
-        holder.imgDelete.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
+                int deletedPosition = holder.getAdapterPosition();
+                if (deletedPosition != RecyclerView.NO_POSITION) {
                     String emailPath = userEmail.replace("@gmail.com", "");
-                    String databasePath ="/Users/"+ emailPath + "/productCodes";
+                    String databasePath = "/Users/" + emailPath + "/FavProduct";
                     DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference(databasePath)
                             .child(p.getCode());
                     databaseReference.removeValue().addOnSuccessListener(new OnSuccessListener<Void>() {
                         @Override
                         public void onSuccess(Void unused) {
-                            int deletedPosition = holder.getAdapterPosition();
                             productArrayList.remove(deletedPosition);
                             notifyItemRemoved(deletedPosition);
                             Toast.makeText(mContext, "Xóa thành công", Toast.LENGTH_SHORT).show();
@@ -109,10 +85,9 @@ public class CardPayAdapter extends RecyclerView.Adapter<CardPayAdapter.CardPayV
                             Toast.makeText(mContext, "Xóa thất bại", Toast.LENGTH_SHORT).show();
                         }
                     });
-
                 }
-            });
-
+            }
+        });
     }
 
     @Override
@@ -120,19 +95,18 @@ public class CardPayAdapter extends RecyclerView.Adapter<CardPayAdapter.CardPayV
         return productArrayList.size();
     }
 
-    public class CardPayViewHolder extends RecyclerView.ViewHolder {
-        ImageView cardImage,imgDelete;
-        TextView tv_cardName,tv_cardPrice,tv_cardNumber;
-        Button btnAdd,btnApart;
-        public CardPayViewHolder(@NonNull View itemView) {
+    public class FavViewHolder extends RecyclerView.ViewHolder {
+        private ImageView imageFav;
+        private TextView nameFav, priceFav, describeFav;
+        private Button btnFav;
+
+        public FavViewHolder(@NonNull View itemView) {
             super(itemView);
-            cardImage = itemView.findViewById(R.id.card_image);
-            tv_cardName = itemView.findViewById(R.id.card_name);
-            tv_cardPrice = itemView.findViewById(R.id.card_price);
-            tv_cardNumber = itemView.findViewById(R.id.text_card);
-            btnAdd =itemView.findViewById(R.id.btn_card_add);
-            btnApart =itemView.findViewById(R.id.btn_card_apart);
-            imgDelete =itemView.findViewById(R.id.card_delete);
+            imageFav = itemView.findViewById(R.id.item_fav_image);
+            nameFav = itemView.findViewById(R.id.item_fav_name);
+            priceFav = itemView.findViewById(R.id.item_fav_price);
+            describeFav = itemView.findViewById(R.id.item_fav_describe);
+            btnFav = itemView.findViewById(R.id.btnFavorite);
         }
     }
 }

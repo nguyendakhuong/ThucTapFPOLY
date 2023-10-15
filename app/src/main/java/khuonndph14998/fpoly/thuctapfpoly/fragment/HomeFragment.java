@@ -163,7 +163,7 @@ public class HomeFragment extends Fragment {
         String userEmail = getCurrentUserEmail();
         if (userEmail != null ){
             String emailPath = userEmail.replace("@gmail.com", "");
-            String databasePath = emailPath + "/productCodes";
+            String databasePath ="/Users/"+ emailPath + "/productCodes";
             DatabaseReference databaseRef = FirebaseDatabase.getInstance().getReference(databasePath);
             databaseRef.addValueEventListener(new ValueEventListener() {
                 @Override

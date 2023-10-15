@@ -73,7 +73,7 @@ public class CreateProductActivity extends AppCompatActivity {
                 String note = inputNote.getText().toString().trim();
                 String describe = inputDescribe.getText().toString().trim();
                 String priceText = inputPrice.getText().toString().trim();
-                String favStatus = "0" ;
+                int favStatus = Integer.parseInt(String.valueOf(1));
 
 
                 if (TextUtils.isEmpty(name) || TextUtils.isEmpty(code) || TextUtils.isEmpty(quantityText) ||
