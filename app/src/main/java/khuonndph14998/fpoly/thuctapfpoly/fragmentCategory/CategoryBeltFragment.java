@@ -32,7 +32,7 @@ import khuonndph14998.fpoly.thuctapfpoly.model.Product;
 
 public class CategoryBeltFragment extends Fragment implements ItemProductListener {
 
-    private RecyclerView rclView_cardProductAll;
+    private RecyclerView rclView_cardProductBelt;
     private ArrayList<Product> cardProductArrayList;
     CardProductAdapter adapter;
     private FirebaseFirestore db;
@@ -44,16 +44,15 @@ public class CategoryBeltFragment extends Fragment implements ItemProductListene
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_category_belt, container, false);
+        rclView_cardProductBelt = view.findViewById(R.id.cardProduct_rclView_Belt);
 
-        rclView_cardProductAll = view.findViewById(R.id.cardProduct_rclView_Belt);
-        rclView_cardProductAll.setHasFixedSize(true);
-
+        rclView_cardProductBelt.setHasFixedSize(true);
         db = FirebaseFirestore.getInstance();
         cardProductArrayList = new ArrayList<Product>();
         adapter = new CardProductAdapter(getContext(),cardProductArrayList,this);
-        rclView_cardProductAll.setAdapter(adapter);
+        rclView_cardProductBelt.setAdapter(adapter);
         GridLayoutManager gridLayoutManager = new GridLayoutManager(getContext(),2);
-        rclView_cardProductAll.setLayoutManager(gridLayoutManager);
+        rclView_cardProductBelt.setLayoutManager(gridLayoutManager);
 
         progressDialog = new ProgressDialog(getContext());
         progressDialog.setCancelable(false);

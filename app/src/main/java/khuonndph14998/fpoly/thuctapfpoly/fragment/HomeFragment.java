@@ -41,6 +41,7 @@ import khuonndph14998.fpoly.thuctapfpoly.fragmentCategory.CategoryBeltFragment;
 import khuonndph14998.fpoly.thuctapfpoly.fragmentCategory.CategoryJeansFragment;
 import khuonndph14998.fpoly.thuctapfpoly.fragmentCategory.CategoryShirtFragment;
 import khuonndph14998.fpoly.thuctapfpoly.fragmentCategory.CategoryShoesFragment;
+import khuonndph14998.fpoly.thuctapfpoly.fragmentCategory.CategorySuitFragment;
 import khuonndph14998.fpoly.thuctapfpoly.fragmentCategory.CategoryTshirtFragment;
 import khuonndph14998.fpoly.thuctapfpoly.fragmentCategory.CategotyAllFragment;
 
@@ -52,7 +53,7 @@ public class HomeFragment extends Fragment {
     private ViewFlipper viewFlipper;
 
     private FrameLayout frameLayout;
-    private Button btnAll,btnbelt,btnJeans,btnShirt,btnShoes,btnTshirt;
+    private Button btnAll,btnbelt,btnJeans,btnShirt,btnShoes,btnTshirt,btnSuit;
     FragmentManager fragmentManager;
 
     private TextView textCard;
@@ -73,8 +74,9 @@ public class HomeFragment extends Fragment {
         btnbelt = view.findViewById(R.id.categoryTL);
         btnJeans = view.findViewById(R.id.categoryQB);
         btnShirt = view.findViewById(R.id.categoryASM);
-        btnTshirt = view.findViewById(R.id.categoryTL);
+        btnTshirt = view.findViewById(R.id.categoryAT);
         btnShoes = view.findViewById(R.id.categoryGD);
+        btnSuit = view.findViewById(R.id.categoryBQA);
         numberOfCards();
 
 
@@ -120,6 +122,13 @@ public class HomeFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 CategoryShoesFragment fragment = new CategoryShoesFragment();
+                fragmentManager.beginTransaction().replace(R.id.FrameLayoutCategory,fragment).commit();
+            }
+        });
+        btnSuit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                CategorySuitFragment fragment = new CategorySuitFragment();
                 fragmentManager.beginTransaction().replace(R.id.FrameLayoutCategory,fragment).commit();
             }
         });

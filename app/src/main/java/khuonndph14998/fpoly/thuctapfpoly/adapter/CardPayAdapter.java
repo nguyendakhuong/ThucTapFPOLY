@@ -2,7 +2,6 @@ package khuonndph14998.fpoly.thuctapfpoly.adapter;
 
 import android.content.Context;
 import android.net.Uri;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,44 +11,36 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
 import khuonndph14998.fpoly.thuctapfpoly.R;
-import khuonndph14998.fpoly.thuctapfpoly.listener.QuantityChangeListener;
+import khuonndph14998.fpoly.thuctapfpoly.listener.CardPayListener;
 import khuonndph14998.fpoly.thuctapfpoly.model.Product;
 
 public class CardPayAdapter extends RecyclerView.Adapter<CardPayAdapter.CardPayViewHolder>{
 
     private Context mContext;
     private ArrayList<Product> productArrayList;
-    private QuantityChangeListener quantityChangeListener;
+    private CardPayListener CardPayListener;
     int number = 1;
+    public clickListenerCardPay mIClickListenerDeleteItem;
 
-    private String getCurrentUserEmail() {
-        FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
-        if (currentUser != null) {
-            return currentUser.getEmail();
-        } else {
-            return null;
-        }
+    public interface clickListenerCardPay {
+        void onClickDeleteItem(Product p);
     }
 
-
-    public CardPayAdapter(Context mContext, ArrayList<Product> productArrayList, QuantityChangeListener quantityChangeListener) {
+    public CardPayAdapter(Context mContext, ArrayList<Product> productArrayList, CardPayListener cardPayListener, clickListenerCardPay mIClickListenerDeleteItem) {
         this.mContext = mContext;
         this.productArrayList = productArrayList;
-        this.quantityChangeListener = quantityChangeListener;
+        this.CardPayListener = cardPayListener;
+        this.mIClickListenerDeleteItem = mIClickListenerDeleteItem;
     }
 
     @NonNull
@@ -62,7 +53,6 @@ public class CardPayAdapter extends RecyclerView.Adapter<CardPayAdapter.CardPayV
     @Override
     public void onBindViewHolder(@NonNull CardPayAdapter.CardPayViewHolder holder, int position) {
         Product p = productArrayList.get(position);
-        String userEmail = getCurrentUserEmail();
         String urlString = p.getImage();
         Uri uri = Uri.parse(urlString);
         holder.tv_cardName.setText(p.getName());
@@ -72,8 +62,8 @@ public class CardPayAdapter extends RecyclerView.Adapter<CardPayAdapter.CardPayV
         holder.btnAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (quantityChangeListener != null) {
-                    quantityChangeListener.onIncrease(position);
+                if (CardPayListener != null) {
+                    CardPayListener.onIncrease(position);
                 }
             }
         });
@@ -81,8 +71,8 @@ public class CardPayAdapter extends RecyclerView.Adapter<CardPayAdapter.CardPayV
         holder.btnApart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (quantityChangeListener != null) {
-                    quantityChangeListener.onDecrease(position);
+                if (CardPayListener != null) {
+                    CardPayListener.onDecrease(position);
                 }
             }
         });
@@ -91,25 +81,8 @@ public class CardPayAdapter extends RecyclerView.Adapter<CardPayAdapter.CardPayV
         holder.imgDelete.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    String emailPath = userEmail.replace("@gmail.com", "");
-                    String databasePath ="/Users/"+ emailPath + "/productCodes";
-                    DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference(databasePath)
-                            .child(p.getCode());
-                    databaseReference.removeValue().addOnSuccessListener(new OnSuccessListener<Void>() {
-                        @Override
-                        public void onSuccess(Void unused) {
-                            int deletedPosition = holder.getAdapterPosition();
-                            productArrayList.remove(deletedPosition);
-                            notifyItemRemoved(deletedPosition);
-                            Toast.makeText(mContext, "Xóa thành công", Toast.LENGTH_SHORT).show();
-                        }
-                    }).addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-                            Toast.makeText(mContext, "Xóa thất bại", Toast.LENGTH_SHORT).show();
-                        }
-                    });
-
+//                    CardPayListener.onCLickDeleteItemCardPay(p);
+                    mIClickListenerDeleteItem.onClickDeleteItem(p);
                 }
             });
 

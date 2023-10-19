@@ -31,7 +31,8 @@ import khuonndph14998.fpoly.thuctapfpoly.listener.ItemProductListener;
 import khuonndph14998.fpoly.thuctapfpoly.model.Product;
 
 public class CategoryShirtFragment extends Fragment implements ItemProductListener {
-    private RecyclerView rclView_cardProductAll;
+
+    private RecyclerView rclView_cardProductShirt;
     private ArrayList<Product> cardProductArrayList;
     CardProductAdapter adapter;
     private FirebaseFirestore db;
@@ -42,15 +43,15 @@ public class CategoryShirtFragment extends Fragment implements ItemProductListen
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_category_shirt, container, false);
-        rclView_cardProductAll = view.findViewById(R.id.cardProduct_rclView_Shirt);
-        rclView_cardProductAll.setHasFixedSize(true);
+        rclView_cardProductShirt = view.findViewById(R.id.cardProduct_rclView_Shirt);
 
+        rclView_cardProductShirt.setHasFixedSize(true);
         db = FirebaseFirestore.getInstance();
         cardProductArrayList = new ArrayList<Product>();
         adapter = new CardProductAdapter(getContext(),cardProductArrayList,this);
-        rclView_cardProductAll.setAdapter(adapter);
+        rclView_cardProductShirt.setAdapter(adapter);
         GridLayoutManager gridLayoutManager = new GridLayoutManager(getContext(),2);
-        rclView_cardProductAll.setLayoutManager(gridLayoutManager);
+        rclView_cardProductShirt.setLayoutManager(gridLayoutManager);
 
         progressDialog = new ProgressDialog(getContext());
         progressDialog.setCancelable(false);

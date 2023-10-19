@@ -75,8 +75,6 @@ public class CardProductAdapter extends RecyclerView.Adapter<CardProductAdapter.
                 String productCode = p.getCode();
                 saveFavProductToDatabase(productCode);
                 getCode(holder,productCode,productCodeList);
-                updateBtnFavoriteState(holder, productCode,databaseReference);
-
             }
         });
     }
@@ -169,12 +167,12 @@ public class CardProductAdapter extends RecyclerView.Adapter<CardProductAdapter.
                     .addOnSuccessListener(new OnSuccessListener<Void>() {
                         @Override
                         public void onSuccess(Void unused) {
-                            Toast.makeText(mContext, "Thêm vào danh sách yêu thích thành công", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(mContext, "Đã chuyển vào danh sách yêu thích!", Toast.LENGTH_SHORT).show();
                         }
                     }).addOnFailureListener(new OnFailureListener() {
                         @Override
                         public void onFailure(@NonNull Exception e) {
-                            Toast.makeText(mContext, "Lỗi", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(mContext, "Lỗi hệ thống", Toast.LENGTH_SHORT).show();
                         }
                     });
         }
@@ -193,7 +191,6 @@ public class CardProductAdapter extends RecyclerView.Adapter<CardProductAdapter.
                         String productCode = snapshot.getKey();
                         productCodeList.add(productCode);
                     }
-                    updateBtnFavoriteState(holder, productCode, databaseReference);
                 }
 
                 @Override
@@ -202,25 +199,5 @@ public class CardProductAdapter extends RecyclerView.Adapter<CardProductAdapter.
             });
 
         }
-    }
-    private void updateBtnFavoriteState(CardProductAdapter.CardProductViewHolder holder, String productCode, DatabaseReference databaseRef) {
-        Log.d("Tag",productCode);
-        databaseRef.child(productCode).addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                if (dataSnapshot.exists()) {
-                    holder.btnFavorite.setEnabled(false);
-                    holder.btnFavorite.setBackgroundResource(R.drawable.ic_baseline_product_favorite);
-                } else {
-                    holder.btnFavorite.setEnabled(true);
-                    holder.btnFavorite.setBackgroundResource(R.drawable.ic_baseline_favorite_border);
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-                // Xử lý lỗi nếu cần
-            }
-        });
     }
 }
