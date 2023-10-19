@@ -12,12 +12,12 @@ public class Product {
     private String selectedItem;
     private String image;
     private int price;
-    private int favStatus;
+    private int number;
 
     public Product() {
     }
 
-    public Product( String name, String code, int quantity, String note, String describe, String selectedItem, String image, int price, int favStatus) {
+    public Product(String name, String code, int quantity, String note, String describe, String selectedItem, String image, int price, int number) {
         this.name = name;
         this.code = code;
         this.quantity = quantity;
@@ -26,15 +26,7 @@ public class Product {
         this.selectedItem = selectedItem;
         this.image = image;
         this.price = price;
-       this.favStatus  = favStatus;
-    }
-
-    public int getFavStatus() {
-        return favStatus;
-    }
-
-    public void setFavStatus(int favStatus) {
-        this.favStatus = favStatus;
+        this.number = number;
     }
 
     public String getName() {
@@ -99,5 +91,13 @@ public class Product {
 
     public void setPrice(int price) {
         this.price = price;
+    }
+
+    public int getNumber() {
+        return number;
+    }
+
+    public void setNumber(int number) {
+        this.number = number;
     }
 }

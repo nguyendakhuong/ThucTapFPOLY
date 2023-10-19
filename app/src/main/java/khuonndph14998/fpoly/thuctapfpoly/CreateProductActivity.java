@@ -73,8 +73,7 @@ public class CreateProductActivity extends AppCompatActivity {
                 String note = inputNote.getText().toString().trim();
                 String describe = inputDescribe.getText().toString().trim();
                 String priceText = inputPrice.getText().toString().trim();
-                int favStatus = Integer.parseInt(String.valueOf(1));
-
+                int number = Integer.parseInt(String.valueOf(1));
 
                 if (TextUtils.isEmpty(name) || TextUtils.isEmpty(code) || TextUtils.isEmpty(quantityText) ||
                         TextUtils.isEmpty(priceText) || TextUtils.isEmpty(describe) || TextUtils.isEmpty(note)) {
@@ -106,7 +105,7 @@ public class CreateProductActivity extends AppCompatActivity {
                 }
 
                 progressBar.setVisibility(View.VISIBLE);
-                Product product = new Product(name, code, quantity, note, describe, selectedItem, imageUri.toString(),price,favStatus);
+                Product product = new Product(name, code, quantity, note, describe, selectedItem, imageUri.toString(),price,number);
                 DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("products");
                 databaseReference.orderByChild("code").equalTo(code).addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override

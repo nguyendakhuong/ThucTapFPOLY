@@ -2,44 +2,45 @@ package khuonndph14998.fpoly.thuctapfpoly.adapter;
 
 import android.content.Context;
 import android.net.Uri;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
 
+import khuonndph14998.fpoly.thuctapfpoly.EventBus.TotalProduct;
 import khuonndph14998.fpoly.thuctapfpoly.R;
-import khuonndph14998.fpoly.thuctapfpoly.listener.CardPayListener;
+import khuonndph14998.fpoly.thuctapfpoly.listener.ButtonClickListenerCardPay;
+import khuonndph14998.fpoly.thuctapfpoly.listener.TotalPriceListener;
 import khuonndph14998.fpoly.thuctapfpoly.model.Product;
 
 public class CardPayAdapter extends RecyclerView.Adapter<CardPayAdapter.CardPayViewHolder>{
 
     private Context mContext;
     private ArrayList<Product> productArrayList;
-    private CardPayListener CardPayListener;
     int number = 1;
     public clickListenerCardPay mIClickListenerDeleteItem;
-
+    long totalPrice = 0;
+    private TotalPriceListener totalPriceListener;
     public interface clickListenerCardPay {
         void onClickDeleteItem(Product p);
     }
+    public void setTotalPriceListener(TotalPriceListener totalPriceListener) {
+        this.totalPriceListener = totalPriceListener;
+    }
 
-    public CardPayAdapter(Context mContext, ArrayList<Product> productArrayList, CardPayListener cardPayListener, clickListenerCardPay mIClickListenerDeleteItem) {
+    public CardPayAdapter(Context mContext, ArrayList<Product> productArrayList, clickListenerCardPay mIClickListenerDeleteItem) {
         this.mContext = mContext;
         this.productArrayList = productArrayList;
-        this.CardPayListener = cardPayListener;
         this.mIClickListenerDeleteItem = mIClickListenerDeleteItem;
     }
 
@@ -50,42 +51,45 @@ public class CardPayAdapter extends RecyclerView.Adapter<CardPayAdapter.CardPayV
         return new CardPayViewHolder(v);
     }
 
+
     @Override
     public void onBindViewHolder(@NonNull CardPayAdapter.CardPayViewHolder holder, int position) {
         Product p = productArrayList.get(position);
+
+
         String urlString = p.getImage();
         Uri uri = Uri.parse(urlString);
         holder.tv_cardName.setText(p.getName());
         holder.cardImage.setImageURI(uri);
         holder.tv_cardPrice.setText(String.valueOf(p.getPrice()));
-
-        holder.btnAdd.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (CardPayListener != null) {
-                    CardPayListener.onIncrease(position);
-                }
-            }
-        });
-
-        holder.btnApart.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (CardPayListener != null) {
-                    CardPayListener.onDecrease(position);
-                }
-            }
-        });
-        holder.tv_cardNumber.setText(String.valueOf(number));
+        holder.tv_cardNumber.setText(String.valueOf(p.getNumber()));
 
         holder.imgDelete.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-//                    CardPayListener.onCLickDeleteItemCardPay(p);
                     mIClickListenerDeleteItem.onClickDeleteItem(p);
                 }
             });
-
+        holder.setListenerCardPay(new ButtonClickListenerCardPay() {
+            @Override
+            public void onButtonClickListener(View view, int pos, int number) {
+                if(number == 1){
+                    if (productArrayList.get(pos).getNumber() > 1){
+                        int soluong = productArrayList.get(pos).getNumber() -1;
+                        productArrayList.get(pos).setNumber(soluong);
+                    }
+                }
+                if (number == 2){
+                    if (productArrayList.get(pos).getNumber() < p.getQuantity()){
+                        int soluong = productArrayList.get(pos).getNumber() +1;
+                        productArrayList.get(pos).setNumber(soluong);
+                    }
+                }
+                holder.tv_cardNumber.setText(productArrayList.get(pos).getNumber() + " ");
+                updateTotalPrice();
+            }
+        });
+        updateTotalPrice();
     }
 
     @Override
@@ -93,10 +97,16 @@ public class CardPayAdapter extends RecyclerView.Adapter<CardPayAdapter.CardPayV
         return productArrayList.size();
     }
 
-    public class CardPayViewHolder extends RecyclerView.ViewHolder {
+    public class CardPayViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         ImageView cardImage,imgDelete;
         TextView tv_cardName,tv_cardPrice,tv_cardNumber;
         Button btnAdd,btnApart;
+        ButtonClickListenerCardPay listenerCardPay;
+
+        public void setListenerCardPay(ButtonClickListenerCardPay listenerCardPay) {
+            this.listenerCardPay = listenerCardPay;
+        }
+
         public CardPayViewHolder(@NonNull View itemView) {
             super(itemView);
             cardImage = itemView.findViewById(R.id.card_image);
@@ -106,6 +116,39 @@ public class CardPayAdapter extends RecyclerView.Adapter<CardPayAdapter.CardPayV
             btnAdd =itemView.findViewById(R.id.btn_card_add);
             btnApart =itemView.findViewById(R.id.btn_card_apart);
             imgDelete =itemView.findViewById(R.id.card_delete);
+
+            btnAdd.setOnClickListener(this);
+            btnApart.setOnClickListener(this);
+
+
         }
+
+        @Override
+        public void onClick(View v) {
+            if(v == btnApart){
+                listenerCardPay.onButtonClickListener(itemView,getAdapterPosition(),1);
+            }
+            if (v == btnAdd){
+                listenerCardPay.onButtonClickListener(itemView,getAdapterPosition(),2);
+            }
+        }
+    }
+    private long calculateTotalPrice() {
+        long totalPrice = 0;
+        for (Product product : productArrayList) {
+            totalPrice += product.getNumber() * product.getPrice();
+        }
+        return totalPrice;
+    }
+    private void updateTotalPrice() {
+        totalPrice = calculateTotalPrice();
+        String gia = String.valueOf(totalPrice);
+        if (totalPriceListener != null) {
+            totalPriceListener.onTotalPriceChanged(totalPrice);
+        }
+        Log.d("gia", gia);
+    }
+    public long getTotalPrice() {
+        return totalPrice;
     }
 }
