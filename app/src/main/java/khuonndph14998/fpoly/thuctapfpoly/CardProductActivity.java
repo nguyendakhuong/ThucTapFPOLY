@@ -32,8 +32,6 @@
 
     import java.util.ArrayList;
     import java.util.List;
-
-    import khuonndph14998.fpoly.thuctapfpoly.EventBus.TotalProduct;
     import khuonndph14998.fpoly.thuctapfpoly.adapter.CardPayAdapter;
     import khuonndph14998.fpoly.thuctapfpoly.listener.TotalPriceListener;
     import khuonndph14998.fpoly.thuctapfpoly.model.Product;

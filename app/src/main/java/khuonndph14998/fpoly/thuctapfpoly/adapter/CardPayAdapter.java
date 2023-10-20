@@ -16,8 +16,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
-
-import khuonndph14998.fpoly.thuctapfpoly.EventBus.TotalProduct;
 import khuonndph14998.fpoly.thuctapfpoly.R;
 import khuonndph14998.fpoly.thuctapfpoly.listener.ButtonClickListenerCardPay;
 import khuonndph14998.fpoly.thuctapfpoly.listener.TotalPriceListener;

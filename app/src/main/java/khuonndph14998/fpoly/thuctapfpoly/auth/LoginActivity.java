@@ -33,7 +33,7 @@ public class LoginActivity extends AppCompatActivity {
 
     private TextInputEditText editTextEmail, editTextPassword;
     private Button btnLogin;
-    private TextView textToRegister;
+    private TextView textToRegister,tv_forgotPassword;
     FirebaseAuth mAuth;
     FirebaseFirestore fStore;
     private ProgressBar progressBar;
@@ -54,6 +54,14 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         anhxa();
+        tv_forgotPassword.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(LoginActivity.this,ForgotPasswordActivity.class);
+                startActivity(i);
+                finish();
+            }
+        });
 
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -127,5 +135,6 @@ public class LoginActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         fStore = FirebaseFirestore.getInstance();
         progressBar = findViewById(R.id.progressbar);
+        tv_forgotPassword = findViewById(R.id.forgotPw);
     }
 }
