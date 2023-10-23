@@ -16,15 +16,17 @@ import com.google.firebase.auth.FirebaseUser;
 import khuonndph14998.fpoly.thuctapfpoly.R;
 import khuonndph14998.fpoly.thuctapfpoly.account.ChangePasswordActivity;
 import khuonndph14998.fpoly.thuctapfpoly.auth.LoginActivity;
+import khuonndph14998.fpoly.thuctapfpoly.user.InfoUserActivity;
 
 public class SettingFragment extends Fragment {
-    private Button logoutButton,btnChangePassword,btnFavorite;
+    private Button logoutButton,btnChangePassword,btnFavorite,btnUserInfo;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_setting, container, false);
         logoutButton = view.findViewById(R.id.fragment_button_logout);
         btnChangePassword = view.findViewById(R.id.btn_setting_account);
         btnFavorite = view.findViewById(R.id.btn_setting_favorite);
+        btnUserInfo = view.findViewById(R.id.btnUserInfo);
 
         FirebaseAuth auth = FirebaseAuth.getInstance();
         FirebaseUser user = auth.getCurrentUser();
@@ -55,6 +57,13 @@ public class SettingFragment extends Fragment {
             public void onClick(View v) {
 //                Intent i = new Intent(getContext(),FavoriteFragment.class);
 //                startActivity(i);
+            }
+        });
+        btnUserInfo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(getContext(), InfoUserActivity.class);
+                startActivity(i);
             }
         });
         return view;

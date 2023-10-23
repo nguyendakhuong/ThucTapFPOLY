@@ -24,6 +24,8 @@ import com.google.firebase.database.FirebaseDatabase;
 import java.util.ArrayList;
 
 import khuonndph14998.fpoly.thuctapfpoly.R;
+import khuonndph14998.fpoly.thuctapfpoly.listener.ItemFavListener;
+import khuonndph14998.fpoly.thuctapfpoly.listener.ItemProductListener;
 import khuonndph14998.fpoly.thuctapfpoly.model.Product;
 
 public class FavAdapter extends RecyclerView.Adapter<FavAdapter.FavViewHolder>  {
@@ -31,16 +33,19 @@ public class FavAdapter extends RecyclerView.Adapter<FavAdapter.FavViewHolder>  
     private ArrayList<Product> productArrayList;
 
     private IClickListener mIClickListener;
+    private ItemFavListener FavoriteListener;
 
     public interface IClickListener {
         void onClickDeleteItemFav(Product p);
     }
 
 
-    public FavAdapter(Context mContext, ArrayList<Product> productArrayList, IClickListener mIClickListener) {
+    public FavAdapter(Context mContext, ArrayList<Product> productArrayList,ItemFavListener FavoriteListener ,IClickListener mIClickListener) {
         this.mContext = mContext;
         this.productArrayList = productArrayList;
+        this.FavoriteListener = FavoriteListener;
         this.mIClickListener = mIClickListener;
+
     }
 
     @NonNull
@@ -63,6 +68,12 @@ public class FavAdapter extends RecyclerView.Adapter<FavAdapter.FavViewHolder>  
             @Override
             public void onClick(View v) {
                 mIClickListener.onClickDeleteItemFav(p);
+            }
+        });
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FavoriteListener.onItemClickFav(productArrayList.get(position));
             }
         });
     }

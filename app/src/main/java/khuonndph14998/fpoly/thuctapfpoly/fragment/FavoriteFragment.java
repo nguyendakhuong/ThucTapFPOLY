@@ -1,6 +1,7 @@
 package khuonndph14998.fpoly.thuctapfpoly.fragment;
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -32,10 +33,12 @@ import java.util.List;
 import khuonndph14998.fpoly.thuctapfpoly.R;
 import khuonndph14998.fpoly.thuctapfpoly.adapter.CardPayAdapter;
 import khuonndph14998.fpoly.thuctapfpoly.adapter.FavAdapter;
+import khuonndph14998.fpoly.thuctapfpoly.detail.UserProductDetailActivity;
+import khuonndph14998.fpoly.thuctapfpoly.listener.ItemFavListener;
 import khuonndph14998.fpoly.thuctapfpoly.model.Product;
 
 
-public class FavoriteFragment extends Fragment {
+public class FavoriteFragment extends Fragment implements ItemFavListener {
     private  RecyclerView recyclerView;
     private ArrayList<Product> productArrayList = new ArrayList<>();
     private FavAdapter adapter;
@@ -44,14 +47,13 @@ public class FavoriteFragment extends Fragment {
 
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_favorite, container, false);
         recyclerView = view.findViewById(R.id.recv_fav);
         recyclerView.setHasFixedSize(true);
         db = FirebaseFirestore.getInstance();
         productArrayList = new ArrayList<Product>();
-        adapter = new FavAdapter(getContext(),productArrayList, new FavAdapter.IClickListener() {
+        adapter = new FavAdapter(getContext(),productArrayList,this, new FavAdapter.IClickListener() {
             @Override
             public void onClickDeleteItemFav(Product p) {
                 onClickDeleteItemFavorite(p);
@@ -144,5 +146,20 @@ public class FavoriteFragment extends Fragment {
                 })
                 .setNegativeButton("Hủy",null)
                 .show();
+    }
+
+    @Override
+    public void onItemClickFav(Product product) {
+        Bundle bundle = new Bundle();
+        Intent i = new Intent(getContext(), UserProductDetailActivity.class);
+        bundle.putString("name",product.getName());
+        bundle.putString("describe",product.getDescribe());
+        bundle.putString("note",product.getNote());
+        bundle.putInt("quantity",product.getQuantity());
+        bundle.putInt("price",product.getPrice());
+        bundle.putString("image",product.getImage());
+        bundle.putString("selectedItem",product.getSelectedItem());
+        i.putExtras(bundle);
+        startActivity(i);
     }
 }

@@ -7,6 +7,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -25,10 +27,11 @@ public class CardPayAdapter extends RecyclerView.Adapter<CardPayAdapter.CardPayV
 
     private Context mContext;
     private ArrayList<Product> productArrayList;
-    int number = 1;
     public clickListenerCardPay mIClickListenerDeleteItem;
     long totalPrice = 0;
     private TotalPriceListener totalPriceListener;
+    private ArrayList<Product> selectedProducts = new ArrayList<>();
+
     public interface clickListenerCardPay {
         void onClickDeleteItem(Product p);
     }
@@ -52,9 +55,8 @@ public class CardPayAdapter extends RecyclerView.Adapter<CardPayAdapter.CardPayV
 
     @Override
     public void onBindViewHolder(@NonNull CardPayAdapter.CardPayViewHolder holder, int position) {
+
         Product p = productArrayList.get(position);
-
-
         String urlString = p.getImage();
         Uri uri = Uri.parse(urlString);
         holder.tv_cardName.setText(p.getName());
@@ -85,6 +87,19 @@ public class CardPayAdapter extends RecyclerView.Adapter<CardPayAdapter.CardPayV
                 }
                 holder.tv_cardNumber.setText(productArrayList.get(pos).getNumber() + " ");
                 updateTotalPrice();
+
+            }
+        });
+        holder.cbPay.setChecked(selectedProducts.contains(p));
+        holder.cbPay.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    selectedProducts.add(p);
+                } else {
+                    selectedProducts.remove(p);
+                }
+                updateTotalPrice();
             }
         });
         updateTotalPrice();
@@ -100,6 +115,7 @@ public class CardPayAdapter extends RecyclerView.Adapter<CardPayAdapter.CardPayV
         TextView tv_cardName,tv_cardPrice,tv_cardNumber;
         Button btnAdd,btnApart;
         ButtonClickListenerCardPay listenerCardPay;
+        CheckBox cbPay;
 
         public void setListenerCardPay(ButtonClickListenerCardPay listenerCardPay) {
             this.listenerCardPay = listenerCardPay;
@@ -114,11 +130,10 @@ public class CardPayAdapter extends RecyclerView.Adapter<CardPayAdapter.CardPayV
             btnAdd =itemView.findViewById(R.id.btn_card_add);
             btnApart =itemView.findViewById(R.id.btn_card_apart);
             imgDelete =itemView.findViewById(R.id.card_delete);
+            cbPay = itemView.findViewById(R.id.checkboxPay);
 
             btnAdd.setOnClickListener(this);
             btnApart.setOnClickListener(this);
-
-
         }
 
         @Override
@@ -133,20 +148,16 @@ public class CardPayAdapter extends RecyclerView.Adapter<CardPayAdapter.CardPayV
     }
     private long calculateTotalPrice() {
         long totalPrice = 0;
-        for (Product product : productArrayList) {
+        for (Product product : selectedProducts) {
             totalPrice += product.getNumber() * product.getPrice();
         }
         return totalPrice;
     }
+
     private void updateTotalPrice() {
         totalPrice = calculateTotalPrice();
-        String gia = String.valueOf(totalPrice);
         if (totalPriceListener != null) {
             totalPriceListener.onTotalPriceChanged(totalPrice);
         }
-        Log.d("gia", gia);
-    }
-    public long getTotalPrice() {
-        return totalPrice;
     }
 }
