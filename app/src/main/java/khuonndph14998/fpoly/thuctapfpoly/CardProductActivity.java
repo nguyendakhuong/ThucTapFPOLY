@@ -1,20 +1,21 @@
     package khuonndph14998.fpoly.thuctapfpoly;
 
     import androidx.annotation.NonNull;
-    import androidx.annotation.Nullable;
     import androidx.appcompat.app.AlertDialog;
     import androidx.appcompat.app.AppCompatActivity;
+    import androidx.fragment.app.FragmentTransaction;
     import androidx.recyclerview.widget.LinearLayoutManager;
     import androidx.recyclerview.widget.RecyclerView;
 
     import android.content.DialogInterface;
+    import android.content.Intent;
     import android.os.Bundle;
+    import android.util.Log;
     import android.view.View;
     import android.widget.Button;
     import android.widget.TextView;
     import android.widget.Toast;
 
-    import com.bumptech.glide.util.Util;
     import com.google.android.gms.tasks.OnFailureListener;
     import com.google.android.gms.tasks.OnSuccessListener;
     import com.google.firebase.auth.FirebaseAuth;
@@ -26,14 +27,12 @@
     import com.google.firebase.database.ValueEventListener;
     import com.google.firebase.firestore.FirebaseFirestore;
 
-    import org.greenrobot.eventbus.EventBus;
-    import org.greenrobot.eventbus.Subscribe;
-    import org.greenrobot.eventbus.ThreadMode;
-
     import java.util.ArrayList;
     import java.util.List;
     import khuonndph14998.fpoly.thuctapfpoly.adapter.CardPayAdapter;
+    import khuonndph14998.fpoly.thuctapfpoly.fragment.SupportFragment;
     import khuonndph14998.fpoly.thuctapfpoly.listener.TotalPriceListener;
+    import khuonndph14998.fpoly.thuctapfpoly.model.PayProduct;
     import khuonndph14998.fpoly.thuctapfpoly.model.Product;
 
     public class CardProductActivity extends AppCompatActivity implements TotalPriceListener {
@@ -45,6 +44,7 @@
         private FirebaseFirestore db;
         private Product product;
         private long totalPrice = 0;
+
 
         @Override
         protected void onCreate(Bundle savedInstanceState) {
@@ -73,8 +73,6 @@
                 }
             });
             cardPayAdapter.setTotalPriceListener(this);
-    //        long totalPrice = cardPayAdapter.getTotalPrice();
-    //        tv_total.setText(String.valueOf(totalPrice));
             recyclerView.setAdapter(cardPayAdapter);
             recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
 
@@ -82,6 +80,25 @@
             btnPay.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    List<Product> selectedProducts = cardPayAdapter.getSelectedProducts();
+                    if (selectedProducts.isEmpty()) {
+                        Toast.makeText(CardProductActivity.this, "Vui lòng chọn sản phẩm để thanh toán", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+
+                    List<Integer> quantities = new ArrayList<>();
+                    String productName, total, productCategory, productImage;
+                    int number, productPrice;
+                    total = tv_total.getText().toString();
+
+                    for (Product product : selectedProducts) {
+                        int quantity = product.getNumber();
+                        quantities.add(quantity);
+                    }
+
+
+                    Intent intent = new Intent(CardProductActivity.this, PayActivity.class);
+                    startActivity(intent);
                 }
             });
         }

@@ -6,13 +6,12 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import android.os.Bundle;
-import android.widget.TextView;
 
 import khuonndph14998.fpoly.thuctapfpoly.databinding.ActivityMainBinding;
 import khuonndph14998.fpoly.thuctapfpoly.fragment.FavoriteFragment;
 import khuonndph14998.fpoly.thuctapfpoly.fragment.HomeFragment;
-import khuonndph14998.fpoly.thuctapfpoly.fragment.PaymentFragment;
 import khuonndph14998.fpoly.thuctapfpoly.fragment.SettingFragment;
+import khuonndph14998.fpoly.thuctapfpoly.fragment.SupportFragment;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -32,8 +31,8 @@ public class MainActivity extends AppCompatActivity {
                 case R.id.favorite:
                     replaceFragment(new FavoriteFragment());
                     break;
-                case R.id.payment:
-                    replaceFragment(new PaymentFragment());
+                case R.id.support:
+                    replaceFragment(new SupportFragment());
                     break;
                 case R.id.settings:
                     replaceFragment(new SettingFragment());

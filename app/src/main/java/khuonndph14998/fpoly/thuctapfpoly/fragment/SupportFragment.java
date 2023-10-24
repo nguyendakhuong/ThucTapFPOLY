@@ -10,13 +10,15 @@ import android.view.ViewGroup;
 
 import khuonndph14998.fpoly.thuctapfpoly.R;
 
-
-public class PaymentFragment extends Fragment {
+public class SupportFragment extends Fragment {
 
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_payment, container, false);
+        // Inflate the layout for this fragment
+        View view = inflater.inflate(R.layout.fragment_support, container, false);
+
+        return  view;
     }
 }

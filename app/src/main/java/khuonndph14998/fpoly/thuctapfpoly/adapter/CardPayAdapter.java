@@ -160,4 +160,7 @@ public class CardPayAdapter extends RecyclerView.Adapter<CardPayAdapter.CardPayV
             totalPriceListener.onTotalPriceChanged(totalPrice);
         }
     }
+    public ArrayList<Product> getSelectedProducts() {
+        return selectedProducts;
+    }
 }
