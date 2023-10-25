@@ -65,4 +65,7 @@ public class PayAdapter extends RecyclerView.Adapter<PayAdapter.PayViewHoder> {
         tvPay_price = itemView.findViewById(R.id.item_pay_price);
         }
     }
+    public List<Product> getProductList() {
+        return productArrayList;
+    }
 }

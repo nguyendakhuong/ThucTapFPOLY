@@ -28,19 +28,22 @@
         <EditText
             android:layout_marginRight="10dp"
             android:id="@+id/ed_code"
-            android:layout_width="200dp"
+            android:layout_width="150dp"
             android:layout_height="wrap_content"
             android:hint="Mã"/>
         <Button
+
             android:id="@+id/btn_code"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Nhận code"/>
     </LinearLayout>
     <androidx.recyclerview.widget.RecyclerView
+        android:layout_marginHorizontal="10dp"
+        android:layout_gravity="end"
         android:id="@+id/rcv_pay"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_width="300dp"
+        android:layout_height="200dp" />
     <LinearLayout
         android:layout_gravity="end"
         android:layout_marginHorizontal="10dp"
@@ -57,6 +60,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="20"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="đ"/>
     </LinearLayout>
     <CheckBox
         android:layout_gravity="end"
@@ -65,7 +72,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Thanh toán khi nhận hàng"
-        android:id="@+id/checkbox"/>
+        android:id="@+id/Pay_checkbox"/>
     <LinearLayout
         android:layout_gravity="end"
         android:layout_marginRight="10dp"
@@ -81,7 +88,7 @@
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Thanh toán"
+            android:text="Đặt hàng"
             android:id="@+id/btn_Pay"/>
     </LinearLayout>
 
