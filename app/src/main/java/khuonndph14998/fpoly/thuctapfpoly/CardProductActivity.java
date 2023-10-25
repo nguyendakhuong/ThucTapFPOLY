@@ -7,8 +7,10 @@
     import androidx.recyclerview.widget.LinearLayoutManager;
     import androidx.recyclerview.widget.RecyclerView;
 
+    import android.content.Context;
     import android.content.DialogInterface;
     import android.content.Intent;
+    import android.content.SharedPreferences;
     import android.os.Bundle;
     import android.util.Log;
     import android.view.View;
@@ -26,6 +28,7 @@
     import com.google.firebase.database.FirebaseDatabase;
     import com.google.firebase.database.ValueEventListener;
     import com.google.firebase.firestore.FirebaseFirestore;
+    import com.google.gson.Gson;
 
     import java.util.ArrayList;
     import java.util.List;
@@ -86,17 +89,15 @@
                         return;
                     }
 
-                    List<Integer> quantities = new ArrayList<>();
-                    String productName, total, productCategory, productImage;
-                    int number, productPrice;
-                    total = tv_total.getText().toString();
+                    Gson gson = new Gson();
+                    String productListJson = gson.toJson(selectedProducts);
 
-                    for (Product product : selectedProducts) {
-                        int quantity = product.getNumber();
-                        quantities.add(quantity);
-                    }
-
-
+                    SharedPreferences sharedPreferences = getSharedPreferences("data", Context.MODE_PRIVATE);
+                    SharedPreferences.Editor editor = sharedPreferences.edit();
+                    editor.putString("productList", productListJson);
+                    editor.apply();
+                    Log.d("SharedPreferences", "Product List: " + productListJson);
+                    // Chuyển sang màn hình thanh toán
                     Intent intent = new Intent(CardProductActivity.this, PayActivity.class);
                     startActivity(intent);
                 }

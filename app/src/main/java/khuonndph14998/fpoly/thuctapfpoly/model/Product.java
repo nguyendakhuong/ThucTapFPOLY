@@ -15,6 +15,7 @@ public class Product {
     private int number;
 
     public Product() {
+
     }
 
     public Product(String name, String code, int quantity, String note, String describe, String selectedItem, String image, int price, int number) {

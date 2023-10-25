@@ -12,6 +12,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import khuonndph14998.fpoly.thuctapfpoly.R;
 import khuonndph14998.fpoly.thuctapfpoly.model.PayProduct;
@@ -19,9 +20,9 @@ import khuonndph14998.fpoly.thuctapfpoly.model.Product;
 
 public class PayAdapter extends RecyclerView.Adapter<PayAdapter.PayViewHoder> {
     private Context mContext;
-    private ArrayList<PayProduct> productArrayList;
+    private List<Product> productArrayList;
 
-    public PayAdapter(Context mContext, ArrayList<PayProduct> productArrayList) {
+    public PayAdapter(Context mContext, List<Product> productArrayList) {
         this.mContext = mContext;
         this.productArrayList = productArrayList;
     }
@@ -35,16 +36,15 @@ public class PayAdapter extends RecyclerView.Adapter<PayAdapter.PayViewHoder> {
 
     @Override
     public void onBindViewHolder(@NonNull PayAdapter.PayViewHoder holder, int position) {
-        PayProduct p = productArrayList.get(position);
+        Product p = productArrayList.get(position);
         String urlString = p.getImage();
         Uri uri = Uri.parse(urlString);
         holder.imgPay.setImageURI(uri);
 
         holder.tvPay_name.setText(p.getName());
         holder.tvPay_quantity.setText(String.valueOf(p.getNumber()));
-        holder.tvPay_category.setText(p.getCategory());
+        holder.tvPay_category.setText(p.getSelectedItem());
         holder.tvPay_price.setText(String.valueOf(p.getPrice()));
-
 
     }
 
