@@ -75,6 +75,21 @@
         android:id="@+id/Pay_checkbox"/>
     <LinearLayout
         android:layout_gravity="end"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Địa chỉ nhận hàng: "/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Ha Noi"
+            android:id="@+id/tv_address"/>
+    </LinearLayout>
+    <LinearLayout
+        android:layout_gravity="end"
         android:layout_marginRight="10dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

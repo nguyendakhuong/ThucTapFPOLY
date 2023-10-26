@@ -163,4 +163,9 @@ public class CardPayAdapter extends RecyclerView.Adapter<CardPayAdapter.CardPayV
     public ArrayList<Product> getSelectedProducts() {
         return selectedProducts;
     }
+
+    public void clearAllItems() {
+        productArrayList.clear();
+        notifyDataSetChanged();
+    }
 }

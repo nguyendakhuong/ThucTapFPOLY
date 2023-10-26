@@ -140,6 +140,16 @@ public class PayActivity extends AppCompatActivity{
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if (snapshot.exists()) {
                     deleteQuantityProduct();
+                    AlertDialog.Builder builder = new AlertDialog.Builder(PayActivity.this);
+                    builder.setTitle("Thông báo")
+                            .setMessage("Đặt hàng thành công!")
+                            .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    Intent i = new Intent(PayActivity.this,MainActivity.class);
+                                    startActivity(i);
+                                }
+                            }).show();
                 } else {
                     AlertDialog.Builder builder = new AlertDialog.Builder(PayActivity.this);
                     builder.setTitle("Thông báo")
@@ -174,13 +184,22 @@ public class PayActivity extends AppCompatActivity{
     }
     public void deleteQuantityProduct(){
         List<Product> productList = adapter.getProductList();
+        String codeProduct;
         for (Product product : productList) {
+            String userEmail = getCurrentUserEmail();
+            String emailPath = userEmail.replace("@gmail.com", "");
+            String databasePath ="/Users/"+ emailPath + "/productCodes";
+
             int quantity = product.getQuantity();
             int number = product.getNumber();
             int updatedQuantity = quantity - number;
+            codeProduct = product.getCode();
 
             DatabaseReference productRef = FirebaseDatabase.getInstance().getReference("products").child(product.getCode());
             productRef.child("quantity").setValue(updatedQuantity);
+
+            DatabaseReference productCodeRef = FirebaseDatabase.getInstance().getReference(databasePath).child(codeProduct);
+            productCodeRef.removeValue();
         }
     }
     public void anhxa(){

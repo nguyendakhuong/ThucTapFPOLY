@@ -73,15 +73,17 @@ public class FavoriteFragment extends Fragment implements ItemFavListener {
             return null;
         }
     }
+
     private void getCode() {
         String userEmail = getCurrentUserEmail();
         if (userEmail != null) {
             String emailPath = userEmail.replace("@gmail.com", "");
-            String databasePath ="/Users/"+ emailPath + "/FavProduct";
+            String databasePath = "/Users/" + emailPath + "/FavProduct";
             DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference(databasePath);
-            databaseReference.addValueEventListener(new ValueEventListener() {
+
+            databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                     List<String> productCodeList = new ArrayList<>();
                     for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                         String productCode = snapshot.getKey();
@@ -93,35 +95,37 @@ public class FavoriteFragment extends Fragment implements ItemFavListener {
                 }
 
                 @Override
-                public void onCancelled(DatabaseError databaseError) {
+                public void onCancelled(@NonNull DatabaseError error) {
+                    // Xử lý lỗi
                 }
             });
-
         }
     }
+
     private void loadProducts(String productCode) {
-        if (productCode != null) {
-            DatabaseReference productsRef = FirebaseDatabase.getInstance().getReference("products");
-            productsRef.orderByChild("code").equalTo(productCode).addListenerForSingleValueEvent(new ValueEventListener() {
-                @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
-                    List<Product> productList = new ArrayList<>();
-                    for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                        Product product = snapshot.getValue(Product.class);
-                        if (product != null) {
-                            productList.add(product);
-                        }
+        DatabaseReference productsRef = FirebaseDatabase.getInstance().getReference("products");
+        productsRef.orderByChild("code").equalTo(productCode).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                List<Product> productList = new ArrayList<>();
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    Product product = snapshot.getValue(Product.class);
+                    if (product != null) {
+                        productList.add(product);
                     }
-                    productArrayList.addAll(productList);
-                    adapter.notifyDataSetChanged();
                 }
+                productArrayList.addAll(productList);
+                adapter.notifyDataSetChanged();
+            }
 
-                @Override
-                public void onCancelled(DatabaseError databaseError) {
-                }
-            });
-        }
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                // Xử lý lỗi
+            }
+        });
     }
+
+
     private void onClickDeleteItemFavorite (Product p) {
         String userEmail = getCurrentUserEmail();
         new AlertDialog.Builder(getContext())

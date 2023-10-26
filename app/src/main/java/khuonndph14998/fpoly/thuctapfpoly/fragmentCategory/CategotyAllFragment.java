@@ -76,13 +76,15 @@ public class CategotyAllFragment extends Fragment implements ItemProductListener
 
     private void loadProducts() {
         DatabaseReference productsRef = FirebaseDatabase.getInstance().getReference("products");
-        productsRef.addValueEventListener(new ValueEventListener() {
+        productsRef.orderByChild("quantity").startAfter(1).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 cardProductArrayList.clear();
                 for (DataSnapshot sp : snapshot.getChildren()) {
                     Product product = sp.getValue(Product.class);
-                    cardProductArrayList.add(product);
+                    if (product != null && product.getQuantity() > 0) {
+                        cardProductArrayList.add(product);
+                    }
                 }
                 adapter.notifyDataSetChanged();
                 progressDialog.dismiss();

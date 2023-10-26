@@ -71,16 +71,18 @@ public class CategoryShirtFragment extends Fragment implements ItemProductListen
                 cardProductArrayList.clear();
                 for (DataSnapshot sp : dataSnapshot.getChildren()) {
                     Product product = sp.getValue(Product.class);
-                    cardProductArrayList.add(product);
+                    if (product != null && product.getQuantity() > 0) {
+                        cardProductArrayList.add(product);
+                    }
                 }
                 adapter.notifyDataSetChanged();
                 progressDialog.dismiss();
             }
+
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
                 progressDialog.dismiss();
                 Toast.makeText(getContext(), "Đã có lỗi xảy ra", Toast.LENGTH_SHORT).show();
-
             }
         });
     }

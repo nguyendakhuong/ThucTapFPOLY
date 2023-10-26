@@ -1,6 +1,7 @@
     package khuonndph14998.fpoly.thuctapfpoly;
 
     import androidx.annotation.NonNull;
+    import androidx.annotation.Nullable;
     import androidx.appcompat.app.AlertDialog;
     import androidx.appcompat.app.AppCompatActivity;
     import androidx.fragment.app.FragmentTransaction;
@@ -22,12 +23,14 @@
     import com.google.android.gms.tasks.OnSuccessListener;
     import com.google.firebase.auth.FirebaseAuth;
     import com.google.firebase.auth.FirebaseUser;
+    import com.google.firebase.database.ChildEventListener;
     import com.google.firebase.database.DataSnapshot;
     import com.google.firebase.database.DatabaseError;
     import com.google.firebase.database.DatabaseReference;
     import com.google.firebase.database.FirebaseDatabase;
     import com.google.firebase.database.ValueEventListener;
     import com.google.firebase.firestore.FirebaseFirestore;
+    import com.google.firebase.database.Query;
     import com.google.gson.Gson;
 
     import java.util.ArrayList;
@@ -96,13 +99,12 @@
                     SharedPreferences.Editor editor = sharedPreferences.edit();
                     editor.putString("productList", productListJson);
                     editor.apply();
-                    Log.d("SharedPreferences", "Product List: " + productListJson);
-                    // Chuyển sang màn hình thanh toán
                     Intent intent = new Intent(CardProductActivity.this, PayActivity.class);
                     startActivity(intent);
                 }
             });
         }
+
         private void deleteProduct(Product p){
             String userEmail = getCurrentUserEmail();
             String emailPath = userEmail.replace("@gmail.com", "");
@@ -131,15 +133,65 @@
                 return null;
             }
         }
+//        private void getCode() {
+//            String userEmail = getCurrentUserEmail();
+//            if (userEmail != null) {
+//                String emailPath = userEmail.replace("@gmail.com", "");
+//                String databasePath ="/Users/"+ emailPath + "/productCodes";
+//                DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference(databasePath);
+//                databaseReference.addValueEventListener(new ValueEventListener() {
+//                    @Override
+//                    public void onDataChange(DataSnapshot dataSnapshot) {
+//                        List<String> productCodeList = new ArrayList<>();
+//                        for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+//                            String productCode = snapshot.getKey();
+//                            productCodeList.add(productCode);
+//                        }
+//                        for (String code : productCodeList) {
+//                            loadProducts(code);
+//                        }
+//                    }
+//                    @Override
+//                    public void onCancelled(DatabaseError databaseError) {
+//                    }
+//                });
+//
+//            }
+//        }
+//        private void loadProducts(String productCode) {
+//            if (productCode != null) {
+//                DatabaseReference productsRef = FirebaseDatabase.getInstance().getReference("products");
+//                productsRef.orderByChild("code").equalTo(productCode).addListenerForSingleValueEvent(new ValueEventListener() {
+//                    @Override
+//                    public void onDataChange(DataSnapshot dataSnapshot) {
+//                        List<Product> productList = new ArrayList<>();
+//                        for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+//                            Product product = snapshot.getValue(Product.class);
+//                            if (product != null) {
+//                                productList.add(product);
+//                            }
+//                        }
+//                        productArrayList.addAll(productList);
+//                        cardPayAdapter.notifyDataSetChanged();
+//                    }
+//
+//                    @Override
+//                    public void onCancelled(DatabaseError databaseError) {
+//                    }
+//                });
+//            }
+//        }
+
         private void getCode() {
             String userEmail = getCurrentUserEmail();
             if (userEmail != null) {
                 String emailPath = userEmail.replace("@gmail.com", "");
-                String databasePath ="/Users/"+ emailPath + "/productCodes";
+                String databasePath = "/Users/" + emailPath + "/productCodes";
                 DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference(databasePath);
-                databaseReference.addValueEventListener(new ValueEventListener() {
+
+                databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                         List<String> productCodeList = new ArrayList<>();
                         for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                             String productCode = snapshot.getKey();
@@ -149,35 +201,36 @@
                             loadProducts(code);
                         }
                     }
+
                     @Override
-                    public void onCancelled(DatabaseError databaseError) {
+                    public void onCancelled(@NonNull DatabaseError error) {
+                        // Xử lý lỗi
                     }
                 });
-
             }
         }
-        private void loadProducts(String productCode) {
-            if (productCode != null) {
-                DatabaseReference productsRef = FirebaseDatabase.getInstance().getReference("products");
-                productsRef.orderByChild("code").equalTo(productCode).addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-                        List<Product> productList = new ArrayList<>();
-                        for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                            Product product = snapshot.getValue(Product.class);
-                            if (product != null) {
-                                productList.add(product);
-                            }
-                        }
-                        productArrayList.addAll(productList);
-                        cardPayAdapter.notifyDataSetChanged();
-                    }
 
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
+        private void loadProducts(String productCode) {
+            DatabaseReference productsRef = FirebaseDatabase.getInstance().getReference("products");
+            productsRef.orderByChild("code").equalTo(productCode).addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    List<Product> productList = new ArrayList<>();
+                    for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                        Product product = snapshot.getValue(Product.class);
+                        if (product != null) {
+                            productList.add(product);
+                        }
                     }
-                });
-            }
+                    productArrayList.addAll(productList);
+                    cardPayAdapter.notifyDataSetChanged();
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+                    // Xử lý lỗi
+                }
+            });
         }
         private void anhxa() {
             recyclerView = findViewById(R.id.rcv_card);
