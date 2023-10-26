@@ -133,54 +133,6 @@
                 return null;
             }
         }
-//        private void getCode() {
-//            String userEmail = getCurrentUserEmail();
-//            if (userEmail != null) {
-//                String emailPath = userEmail.replace("@gmail.com", "");
-//                String databasePath ="/Users/"+ emailPath + "/productCodes";
-//                DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference(databasePath);
-//                databaseReference.addValueEventListener(new ValueEventListener() {
-//                    @Override
-//                    public void onDataChange(DataSnapshot dataSnapshot) {
-//                        List<String> productCodeList = new ArrayList<>();
-//                        for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-//                            String productCode = snapshot.getKey();
-//                            productCodeList.add(productCode);
-//                        }
-//                        for (String code : productCodeList) {
-//                            loadProducts(code);
-//                        }
-//                    }
-//                    @Override
-//                    public void onCancelled(DatabaseError databaseError) {
-//                    }
-//                });
-//
-//            }
-//        }
-//        private void loadProducts(String productCode) {
-//            if (productCode != null) {
-//                DatabaseReference productsRef = FirebaseDatabase.getInstance().getReference("products");
-//                productsRef.orderByChild("code").equalTo(productCode).addListenerForSingleValueEvent(new ValueEventListener() {
-//                    @Override
-//                    public void onDataChange(DataSnapshot dataSnapshot) {
-//                        List<Product> productList = new ArrayList<>();
-//                        for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-//                            Product product = snapshot.getValue(Product.class);
-//                            if (product != null) {
-//                                productList.add(product);
-//                            }
-//                        }
-//                        productArrayList.addAll(productList);
-//                        cardPayAdapter.notifyDataSetChanged();
-//                    }
-//
-//                    @Override
-//                    public void onCancelled(DatabaseError databaseError) {
-//                    }
-//                });
-//            }
-//        }
 
         private void getCode() {
             String userEmail = getCurrentUserEmail();

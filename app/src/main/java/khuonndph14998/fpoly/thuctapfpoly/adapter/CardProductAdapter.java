@@ -60,8 +60,34 @@ public class CardProductAdapter extends RecyclerView.Adapter<CardProductAdapter.
         Product p = productArrayList.get(position);
         String userEmail = getCurrentUserEmail();
         String emailPath = userEmail.replace("@gmail.com", "");
-        String databasePath ="/Users/"+ emailPath + "/productCodes";
+        String databasePath ="/Users/"+ emailPath + "/FavProduct";
         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference(databasePath);
+
+        databaseReference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                List<String> codeList = new ArrayList<>();
+                for (DataSnapshot sp : snapshot.getChildren()) {
+                    String code = sp.getKey(); // Lấy key của node con làm mã code
+                    codeList.add(code);
+                }
+
+                // Kiểm tra xem sản phẩm có trong danh sách yêu thích hay không
+                if (isProductInFavorites(p.getCode(), codeList)) {
+                    holder.btnFavorite.setBackgroundResource(R.drawable.ic_baseline_product_favorite);
+                    holder.btnFavorite.setEnabled(false);
+                } else {
+                    holder.btnFavorite.setBackgroundResource(R.drawable.ic_baseline_favorite_border);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
+
         String urlString = p.getImage();
         Uri uri = Uri.parse(urlString);
         holder.textView_name.setText(p.getName());
@@ -74,9 +100,11 @@ public class CardProductAdapter extends RecyclerView.Adapter<CardProductAdapter.
             public void onClick(View v) {
                 String productCode = p.getCode();
                 saveFavProductToDatabase(productCode);
-                getCode(holder,productCode,productCodeList);
+                holder.btnFavorite.setBackgroundResource(R.drawable.ic_baseline_product_favorite);
+                holder.btnFavorite.setEnabled(false);
             }
         });
+
     }
 
     @Override
@@ -177,27 +205,7 @@ public class CardProductAdapter extends RecyclerView.Adapter<CardProductAdapter.
                     });
         }
     }
-    private void getCode(CardProductAdapter.CardProductViewHolder holder, String productCode, List<String> productCodeList) {
-        String userEmail = getCurrentUserEmail();
-        if (userEmail != null) {
-            String emailPath = userEmail.replace("@gmail.com", "");
-            String databasePath ="/Users/"+ emailPath + "/FavProduct";
-            DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference(databasePath);
-            databaseReference.addValueEventListener(new ValueEventListener() {
-                @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
-                    List<String> productCodeList = new ArrayList<>();
-                    for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                        String productCode = snapshot.getKey();
-                        productCodeList.add(productCode);
-                    }
-                }
-
-                @Override
-                public void onCancelled(DatabaseError databaseError) {
-                }
-            });
-
-        }
+    private boolean isProductInFavorites(String productCode, List<String> codeList) {
+        return codeList.contains(productCode);
     }
 }
