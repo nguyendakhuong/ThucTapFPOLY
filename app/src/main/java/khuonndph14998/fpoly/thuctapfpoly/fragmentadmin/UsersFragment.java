@@ -1,6 +1,7 @@
 package khuonndph14998.fpoly.thuctapfpoly.fragmentadmin;
 
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -32,6 +33,7 @@ import java.util.ArrayList;
 
 import khuonndph14998.fpoly.thuctapfpoly.R;
 import khuonndph14998.fpoly.thuctapfpoly.adapter.UserAdapter;
+import khuonndph14998.fpoly.thuctapfpoly.admin.CreateAdminActivity;
 import khuonndph14998.fpoly.thuctapfpoly.model.User;
 
 public class UsersFragment extends Fragment {
@@ -83,6 +85,7 @@ public class UsersFragment extends Fragment {
                 progressDialog.dismiss();
             }
         });
+
 
         icon_search.setOnClickListener(new View.OnClickListener() {
             @Override

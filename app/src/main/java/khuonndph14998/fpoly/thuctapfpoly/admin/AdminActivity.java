@@ -30,6 +30,9 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 import khuonndph14998.fpoly.thuctapfpoly.R;
 import khuonndph14998.fpoly.thuctapfpoly.auth.LoginActivity;
+import khuonndph14998.fpoly.thuctapfpoly.fragmentadmin.ChatFragment;
+import khuonndph14998.fpoly.thuctapfpoly.fragmentadmin.CodeFragment;
+import khuonndph14998.fpoly.thuctapfpoly.fragmentadmin.CreateAdminFragment;
 import khuonndph14998.fpoly.thuctapfpoly.fragmentadmin.ProductFragment;
 import khuonndph14998.fpoly.thuctapfpoly.fragmentadmin.UsersFragment;
 import khuonndph14998.fpoly.thuctapfpoly.model.Admin;
@@ -78,6 +81,15 @@ public class AdminActivity extends AppCompatActivity implements NavigationView.O
                 break;
             case R.id.admin_product:
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new ProductFragment()).commit();
+                break;
+            case R.id.admin_chat:
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new ChatFragment()).commit();
+                break;
+            case R.id.admin_code:
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new CodeFragment()).commit();
+                break;
+            case R.id.admin_createAdmin:
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new CreateAdminFragment()).commit();
                 break;
             case R.id.admin_logout:
                 logOutAdmin();

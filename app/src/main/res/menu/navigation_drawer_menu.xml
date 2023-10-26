@@ -6,19 +6,23 @@
         <item
             android:id="@+id/admin_account"
             android:icon="@drawable/ic_baseline_manage_accounts"
-            android:title="account" />
+            android:title="Tài khoản" />
         <item
             android:id="@+id/admin_product"
             android:icon="@drawable/ic_baseline_playlist_add"
-            android:title="product" />
+            android:title="Sản phẩm" />
         <item
-            android:id="@+id/a"
-            android:icon="@drawable/ic_baseline_payment"
-            android:title="payment" />
+            android:id="@+id/admin_chat"
+            android:icon="@drawable/ic_baseline_chat_24"
+            android:title="Nhắn tin" />
         <item
-            android:id="@+id/b"
-            android:icon="@drawable/ic_baseline_settings"
-            android:title="settings" />
+            android:id="@+id/admin_code"
+            android:icon="@drawable/ic_baseline_discount_24"
+            android:title="Mã giảm giá" />
+        <item
+            android:id="@+id/admin_createAdmin"
+            android:icon="@drawable/ic_baseline_admin"
+            android:title="Tạo tài khoản admin" />
     </group>
     <group android:checkableBehavior="single">
         <item android:title="Admin" android:orderInCategory="100">
@@ -26,11 +30,11 @@
                 <item
                     android:id="@+id/admin_delete_account_admin"
                     android:icon="@drawable/ic_baseline_settings"
-                    android:title="Delete the account" />
+                    android:title="Xóa tài khoản" />
                 <item
                     android:id="@+id/admin_logout"
                     android:icon="@drawable/ic_baseline_logout"
-                    android:title="Logout" />
+                    android:title="Đăng xuất" />
             </menu>
         </item>
     </group>
