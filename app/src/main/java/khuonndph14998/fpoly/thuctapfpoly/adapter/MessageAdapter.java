@@ -1,24 +1,27 @@
 package khuonndph14998.fpoly.thuctapfpoly.adapter;
 
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import khuonndph14998.fpoly.thuctapfpoly.R;
 import khuonndph14998.fpoly.thuctapfpoly.model.Message;
 
 public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageViewHolder>{
 
-    ArrayList<Message> arrayList;
-    public void setData(ArrayList<Message> arrayList){
-        this.arrayList = arrayList;
-        notifyDataSetChanged();
+    private List<Message> messageList;
+
+    public MessageAdapter(List<Message> messageList) {
+        this.messageList = messageList;
     }
 
     @NonNull
@@ -30,26 +33,32 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageV
 
     @Override
     public void onBindViewHolder(@NonNull MessageAdapter.MessageViewHolder holder, int position) {
-        Message m = arrayList.get(position);
-        if (m == null){
-            return;
+        Message message = messageList.get(position);
+        if (message.getSentBy().equals(Message.getSentByMe())){
+            holder.leftChatView.setVisibility(View.GONE);
+            holder.rightChatView.setVisibility(View.VISIBLE);
+            holder.tv_rightMessage.setText(message.getMessage());
+        }else {
+            holder.rightChatView.setVisibility(View.GONE);
+            holder.leftChatView.setVisibility(View.VISIBLE);
+            holder.tv_leftMessage.setText(message.getMessage());
         }
-        holder.tv_message.setText(m.getMessage());
     }
 
     @Override
     public int getItemCount() {
-        if (arrayList != null){
-            return arrayList.size();
-        }
-        return 0;
+        return messageList.size();
     }
 
     public class MessageViewHolder extends RecyclerView.ViewHolder {
-        private TextView tv_message;
+        private LinearLayout leftChatView,rightChatView;
+        private TextView tv_leftMessage,tv_rightMessage;
         public MessageViewHolder(@NonNull View itemView) {
             super(itemView);
-            tv_message = itemView.findViewById(R.id.tv_itemMessage);
+            leftChatView = itemView.findViewById(R.id.left_chat_view);
+            rightChatView = itemView.findViewById(R.id.right_chat_view);
+            tv_leftMessage = itemView.findViewById(R.id.left_chat_text);
+            tv_rightMessage = itemView.findViewById(R.id.right_chat_text);
         }
     }
 }
