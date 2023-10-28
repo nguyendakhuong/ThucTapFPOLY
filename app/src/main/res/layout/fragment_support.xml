@@ -4,40 +4,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".fragment.SupportFragment">
-<!--    <LinearLayout-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="match_parent"-->
-<!--        android:orientation="vertical">-->
-<!--        <androidx.recyclerview.widget.RecyclerView-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="550dp"-->
-<!--            android:id="@+id/rcv_message"-->
-<!--            android:layout_marginHorizontal="10dp"/>-->
-<!--        <LinearLayout-->
-<!--            android:layout_marginTop="10dp"-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:orientation="horizontal">-->
-<!--            <com.google.android.material.textfield.TextInputLayout-->
-<!--                android:layout_width="match_parent"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:layout_margin="10dp"-->
-<!--                android:layout_weight="1">-->
-<!--                <com.google.android.material.textfield.TextInputEditText-->
-<!--                    android:id="@+id/input_message"-->
-<!--                    android:layout_width="match_parent"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:hint="Nhập văn bản"/>-->
-<!--            </com.google.android.material.textfield.TextInputLayout>-->
-<!--            <ImageButton-->
-<!--                android:id="@+id/btnImage_message"-->
-<!--                android:layout_marginHorizontal="10dp"-->
-<!--                android:layout_width="wrap_content"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:src="@drawable/ic_baseline_send_24"-->
-<!--                android:layout_gravity="center"/>-->
-<!--        </LinearLayout>-->
-<!--    </LinearLayout>-->
 <LinearLayout
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -62,9 +28,10 @@
             android:layout_gravity="center"
             android:layout_marginHorizontal="20dp"/>
         <TextView
+            android:layout_weight="1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Nhắn tin với chúng tôi"
+            android:text="Nhắn tin "
             android:layout_gravity="center"
             android:textColor="@color/black"
             android:textSize="16sp"/>
@@ -90,6 +57,7 @@
             android:layout_gravity="center"
             android:layout_marginHorizontal="20dp"/>
         <TextView
+            android:layout_weight="1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Hotline 1900 191 919"
