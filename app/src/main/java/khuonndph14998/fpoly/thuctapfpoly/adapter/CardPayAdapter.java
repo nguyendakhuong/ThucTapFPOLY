@@ -2,7 +2,6 @@ package khuonndph14998.fpoly.thuctapfpoly.adapter;
 
 import android.content.Context;
 import android.net.Uri;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,12 +14,10 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import org.greenrobot.eventbus.EventBus;
-
 import java.util.ArrayList;
 import khuonndph14998.fpoly.thuctapfpoly.R;
-import khuonndph14998.fpoly.thuctapfpoly.listener.ButtonClickListenerCardPay;
-import khuonndph14998.fpoly.thuctapfpoly.listener.TotalPriceListener;
+import khuonndph14998.fpoly.thuctapfpoly.fragmentadmin.listener.ButtonClickListenerCardPay;
+import khuonndph14998.fpoly.thuctapfpoly.fragmentadmin.listener.TotalPriceListener;
 import khuonndph14998.fpoly.thuctapfpoly.model.Product;
 
 public class CardPayAdapter extends RecyclerView.Adapter<CardPayAdapter.CardPayViewHolder>{

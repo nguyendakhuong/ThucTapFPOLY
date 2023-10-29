@@ -15,6 +15,13 @@
             android:layout_height="?attr/actionBarSize"
             app:title="Trang chủ"
             android:background="#ff00dfff">
+            <ImageView
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:src="@drawable/ic_baseline_discount_24"
+                android:layout_gravity="end"
+                android:layout_marginHorizontal="10dp"
+                android:id="@+id/icon_discount"/>
             <TextView
                 android:id="@+id/icon_cart"
                 android:layout_width="40dp"

@@ -27,7 +27,7 @@ import java.util.ArrayList;
 import khuonndph14998.fpoly.thuctapfpoly.R;
 import khuonndph14998.fpoly.thuctapfpoly.adapter.CardProductAdapter;
 import khuonndph14998.fpoly.thuctapfpoly.detail.UserProductDetailActivity;
-import khuonndph14998.fpoly.thuctapfpoly.listener.ItemProductListener;
+import khuonndph14998.fpoly.thuctapfpoly.fragmentadmin.listener.ItemProductListener;
 import khuonndph14998.fpoly.thuctapfpoly.model.Product;
 
 public class CategoryBeltFragment extends Fragment implements ItemProductListener {

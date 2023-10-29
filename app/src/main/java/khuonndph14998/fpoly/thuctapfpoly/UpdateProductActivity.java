@@ -90,7 +90,10 @@ public class UpdateProductActivity extends AppCompatActivity {
                     Toast.makeText(UpdateProductActivity.this, "Số lượng phải lớn hơn 0", Toast.LENGTH_SHORT).show();
                     return;
                 }
-
+                if (price <= 0) {
+                    Toast.makeText(UpdateProductActivity.this, "Giá tiền phải lớn hơn 0", Toast.LENGTH_SHORT).show();
+                    return;
+                }
                 if (selectedItem == null) {
                     Toast.makeText(UpdateProductActivity.this, "Bạn phải chọn một mục trong thể loại", Toast.LENGTH_SHORT).show();
                     return;

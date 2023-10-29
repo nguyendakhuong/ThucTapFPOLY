@@ -1,6 +1,5 @@
 package khuonndph14998.fpoly.thuctapfpoly.fragmentadmin;
 
-import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 
@@ -26,14 +25,10 @@ import java.util.ArrayList;
 
 import khuonndph14998.fpoly.thuctapfpoly.R;
 import khuonndph14998.fpoly.thuctapfpoly.adapter.DiscoundAdapter;
-import khuonndph14998.fpoly.thuctapfpoly.adapter.ProductAdapter;
 import khuonndph14998.fpoly.thuctapfpoly.admin.CreateDiscountCodeActivity;
-import khuonndph14998.fpoly.thuctapfpoly.detail.AdminProductDetailActivity;
 import khuonndph14998.fpoly.thuctapfpoly.detail.DiscountDetailActivity;
-import khuonndph14998.fpoly.thuctapfpoly.listener.ItemDiscountListener;
-import khuonndph14998.fpoly.thuctapfpoly.listener.ItemProductListener;
+import khuonndph14998.fpoly.thuctapfpoly.fragmentadmin.listener.ItemDiscountListener;
 import khuonndph14998.fpoly.thuctapfpoly.model.Discount;
-import khuonndph14998.fpoly.thuctapfpoly.model.Product;
 
 public class CodeFragment extends Fragment implements ItemDiscountListener {
     private ImageView imageViewCreateDiscount;

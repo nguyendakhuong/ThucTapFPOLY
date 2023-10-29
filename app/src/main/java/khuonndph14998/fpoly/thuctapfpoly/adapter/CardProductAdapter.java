@@ -2,7 +2,6 @@ package khuonndph14998.fpoly.thuctapfpoly.adapter;
 
 import android.content.Context;
 import android.net.Uri;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,7 +13,6 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.android.gms.dynamic.IFragmentWrapper;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
@@ -31,7 +29,7 @@ import java.util.List;
 import java.util.Map;
 
 import khuonndph14998.fpoly.thuctapfpoly.R;
-import khuonndph14998.fpoly.thuctapfpoly.listener.ItemProductListener;
+import khuonndph14998.fpoly.thuctapfpoly.fragmentadmin.listener.ItemProductListener;
 import khuonndph14998.fpoly.thuctapfpoly.model.Product;
 
 public class CardProductAdapter extends RecyclerView.Adapter<CardProductAdapter.CardProductViewHolder> {

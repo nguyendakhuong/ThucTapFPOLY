@@ -12,13 +12,10 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import khuonndph14998.fpoly.thuctapfpoly.R;
-import khuonndph14998.fpoly.thuctapfpoly.listener.ItemDiscountListener;
-import khuonndph14998.fpoly.thuctapfpoly.listener.ItemProductListener;
+import khuonndph14998.fpoly.thuctapfpoly.fragmentadmin.listener.ItemDiscountListener;
 import khuonndph14998.fpoly.thuctapfpoly.model.Discount;
-import khuonndph14998.fpoly.thuctapfpoly.model.Product;
 
 public class DiscoundAdapter extends RecyclerView.Adapter<DiscoundAdapter.DiscoundViewHolder>{
     private Context mContext;

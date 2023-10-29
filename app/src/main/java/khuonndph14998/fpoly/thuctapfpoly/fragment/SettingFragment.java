@@ -15,17 +15,18 @@ import com.google.firebase.auth.FirebaseUser;
 
 import khuonndph14998.fpoly.thuctapfpoly.R;
 import khuonndph14998.fpoly.thuctapfpoly.account.ChangePasswordActivity;
+import khuonndph14998.fpoly.thuctapfpoly.account.YourDiscountCodeActivity;
 import khuonndph14998.fpoly.thuctapfpoly.auth.LoginActivity;
 import khuonndph14998.fpoly.thuctapfpoly.user.InfoUserActivity;
 
 public class SettingFragment extends Fragment {
-    private Button logoutButton,btnChangePassword,btnFavorite,btnUserInfo;
+    private Button logoutButton,btnChangePassword,btnDiscount,btnUserInfo;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_setting, container, false);
         logoutButton = view.findViewById(R.id.fragment_button_logout);
         btnChangePassword = view.findViewById(R.id.btn_setting_account);
-        btnFavorite = view.findViewById(R.id.btn_setting_favorite);
+        btnDiscount = view.findViewById(R.id.btn_setting_discount);
         btnUserInfo = view.findViewById(R.id.btnUserInfo);
 
         FirebaseAuth auth = FirebaseAuth.getInstance();
@@ -52,11 +53,11 @@ public class SettingFragment extends Fragment {
             }
         });
 
-        btnFavorite.setOnClickListener(new View.OnClickListener() {
+        btnDiscount.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                Intent i = new Intent(getContext(),FavoriteFragment.class);
-//                startActivity(i);
+                Intent i = new Intent(getContext(), YourDiscountCodeActivity.class);
+                startActivity(i);
             }
         });
         btnUserInfo.setOnClickListener(new View.OnClickListener() {

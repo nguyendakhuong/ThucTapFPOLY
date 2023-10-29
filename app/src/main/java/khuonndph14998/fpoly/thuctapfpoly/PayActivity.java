@@ -11,7 +11,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -33,16 +32,9 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 
-import khuonndph14998.fpoly.thuctapfpoly.adapter.CardPayAdapter;
-import khuonndph14998.fpoly.thuctapfpoly.adapter.CardProductAdapter;
 import khuonndph14998.fpoly.thuctapfpoly.adapter.DetailPayAdapter;
 import khuonndph14998.fpoly.thuctapfpoly.adapter.PayAdapter;
-import khuonndph14998.fpoly.thuctapfpoly.adapter.ProductAdapter;
-import khuonndph14998.fpoly.thuctapfpoly.listener.ItemProductListener;
-import khuonndph14998.fpoly.thuctapfpoly.listener.TotalPriceListener;
-import khuonndph14998.fpoly.thuctapfpoly.model.PayProduct;
 import khuonndph14998.fpoly.thuctapfpoly.model.Product;
 import khuonndph14998.fpoly.thuctapfpoly.user.InfoUserActivity;
 

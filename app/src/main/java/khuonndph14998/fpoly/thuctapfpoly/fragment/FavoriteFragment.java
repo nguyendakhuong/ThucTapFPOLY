@@ -16,8 +16,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -31,10 +29,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import khuonndph14998.fpoly.thuctapfpoly.R;
-import khuonndph14998.fpoly.thuctapfpoly.adapter.CardPayAdapter;
 import khuonndph14998.fpoly.thuctapfpoly.adapter.FavAdapter;
 import khuonndph14998.fpoly.thuctapfpoly.detail.UserProductDetailActivity;
-import khuonndph14998.fpoly.thuctapfpoly.listener.ItemFavListener;
+import khuonndph14998.fpoly.thuctapfpoly.fragmentadmin.listener.ItemFavListener;
 import khuonndph14998.fpoly.thuctapfpoly.model.Product;
 
 
