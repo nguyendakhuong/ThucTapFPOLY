@@ -6,10 +6,8 @@ import android.os.Bundle;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,9 +16,7 @@ import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 import android.widget.ViewFlipper;
 
 import com.bumptech.glide.Glide;
@@ -37,7 +33,6 @@ import java.util.List;
 
 import khuonndph14998.fpoly.thuctapfpoly.CardProductActivity;
 import khuonndph14998.fpoly.thuctapfpoly.R;
-import khuonndph14998.fpoly.thuctapfpoly.account.SystemDiscountCodeActivity;
 import khuonndph14998.fpoly.thuctapfpoly.fragmentCategory.CategoryBeltFragment;
 import khuonndph14998.fpoly.thuctapfpoly.fragmentCategory.CategoryJeansFragment;
 import khuonndph14998.fpoly.thuctapfpoly.fragmentCategory.CategoryShirtFragment;
@@ -49,7 +44,6 @@ import khuonndph14998.fpoly.thuctapfpoly.fragmentCategory.CategotyAllFragment;
 
 public class HomeFragment extends Fragment {
     private Toolbar toolbar;
-    private ImageView iconDiscount;
     private RecyclerView rclViewHome;
     private ViewFlipper viewFlipper;
 
@@ -68,7 +62,6 @@ public class HomeFragment extends Fragment {
         toolbar = view.findViewById(R.id.toolbarHome);
         textCard = view.findViewById(R.id.icon_cart);
         viewFlipper = view.findViewById(R.id.viewFlipper);
-        iconDiscount = view.findViewById(R.id.icon_discount);
 
         frameLayout = view.findViewById(R.id.FrameLayoutCategory);
         fragmentManager = getActivity().getSupportFragmentManager();
@@ -84,14 +77,6 @@ public class HomeFragment extends Fragment {
 
         CategotyAllFragment fragmentAll = new CategotyAllFragment();
         fragmentManager.beginTransaction().replace(R.id.FrameLayoutCategory,fragmentAll).commit();
-
-        iconDiscount.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent i = new Intent(getContext(), SystemDiscountCodeActivity.class);
-                startActivity(i);
-            }
-        });
 
         btnAll.setOnClickListener(new View.OnClickListener() {
             @Override

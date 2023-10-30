@@ -38,16 +38,16 @@ public class LoginActivity extends AppCompatActivity {
     FirebaseFirestore fStore;
     private ProgressBar progressBar;
 
-//    @Override
-//    protected void onStart() {
-//        super.onStart();
-//        FirebaseUser user = mAuth.getCurrentUser();
-//        if (user != null){
-//            Intent i = new Intent(getApplicationContext(), MainActivity.class);
-//            startActivity(i);
-//            finish();
-//        }
-//    }
+    @Override
+    protected void onStart() {
+        super.onStart();
+        FirebaseUser user = mAuth.getCurrentUser();
+        if (user != null){
+            Intent i = new Intent(getApplicationContext(), MainActivity.class);
+            startActivity(i);
+            finish();
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

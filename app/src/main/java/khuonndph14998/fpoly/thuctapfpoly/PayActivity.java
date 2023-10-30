@@ -11,6 +11,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -20,10 +21,12 @@ import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.UserInfo;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import org.json.JSONArray;
@@ -35,6 +38,8 @@ import java.util.List;
 
 import khuonndph14998.fpoly.thuctapfpoly.adapter.DetailPayAdapter;
 import khuonndph14998.fpoly.thuctapfpoly.adapter.PayAdapter;
+import khuonndph14998.fpoly.thuctapfpoly.model.Discount;
+import khuonndph14998.fpoly.thuctapfpoly.model.InfoUser;
 import khuonndph14998.fpoly.thuctapfpoly.model.Product;
 import khuonndph14998.fpoly.thuctapfpoly.user.InfoUserActivity;
 
@@ -42,7 +47,7 @@ public class PayActivity extends AppCompatActivity{
 
     EditText ed_code;
     Button btn_code,btn_Pay;
-    TextView tvCode_sale,tv_totalPay;
+    TextView tvCode_sale,tv_totalPay,tv_address;
     CheckBox checkBox;
 
     RecyclerView rcv_itemPay,rcv_pay;
@@ -50,6 +55,7 @@ public class PayActivity extends AppCompatActivity{
     DetailPayAdapter detailPayAdapter;
 
     int totalPay = 0;
+    private int reducedMoney;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,9 +76,70 @@ public class PayActivity extends AppCompatActivity{
         rcv_pay.setAdapter(detailPayAdapter);
         detailPayAdapter.notifyDataSetChanged();
 
+        String userEmail = getCurrentUserEmail();
+        if (userEmail != null){
+            String emailPath = userEmail.replace("@gmail.com", "");
+            String databasePath ="/Users/"+ emailPath + "/InfoUser";
+            DatabaseReference dataRefInfo = FirebaseDatabase.getInstance().getReference(databasePath);
+            dataRefInfo.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    InfoUser infoUser = snapshot.getValue(InfoUser.class);
+                    if (infoUser != null) {
+                        String address = infoUser.getDeliveryAddress();
+                        tv_address.setText(address);
+                    }
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+
+                }
+            });
+        }
+
         btn_code.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                String discountCode = ed_code.getText().toString().trim();
+                String userEmail = getCurrentUserEmail();
+                if (userEmail != null){
+                    String emailPath = userEmail.replace("@gmail.com", "");
+                    String databasePath ="/Users/"+ emailPath + "/MyDiscount";
+                    DatabaseReference dataRef = FirebaseDatabase.getInstance().getReference(databasePath);
+                    dataRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                            if(snapshot.hasChild(discountCode)){
+                                Toast.makeText(PayActivity.this, "Mã đã được bạn sử dụng", Toast.LENGTH_SHORT).show();
+                            }else {
+                                DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("Discount");
+                                Query query = databaseReference.orderByChild("dc_code").equalTo(discountCode);
+                                query.addListenerForSingleValueEvent(new ValueEventListener() {
+                                    @Override
+                                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                        for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
+                                        Discount discount = dataSnapshot.getValue(Discount.class);
+                                            if (discount != null) {
+                                                reducedMoney = discount.getDc_price();
+                                            }
+                                        }
+                                        tvCode_sale.setText(String.valueOf(reducedMoney));
+                                        totalPrice(reducedMoney);
+                                    }
+                                    @Override
+                                    public void onCancelled(@NonNull DatabaseError error) {
+                                        Toast.makeText(PayActivity.this, "Mã không tồn tại", Toast.LENGTH_SHORT).show();
+                                    }
+                                });
+                            }
+                        }
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError error) {
+
+                        }
+                    });
+                }
 
             }
         });
@@ -86,7 +153,6 @@ public class PayActivity extends AppCompatActivity{
                 }
             }
         });
-        totalPrice();
 
     }
     private List<Product> convertJsonToProductList(String json) {
@@ -164,7 +230,7 @@ public class PayActivity extends AppCompatActivity{
             }
         });
     }
-    public void totalPrice () {
+    public void totalPrice (int reducedMoney) {
         List<Product> listProduct = adapter.getProductList();
         for (Product product : listProduct) {
             int productPrice = product.getPrice();
@@ -202,6 +268,7 @@ public class PayActivity extends AppCompatActivity{
         btn_Pay = findViewById(R.id.btn_Pay);
         tvCode_sale = findViewById(R.id.tvCode_sale);
         tv_totalPay = findViewById(R.id.tv_totalPay);
+        tv_address = findViewById(R.id.tv_address);
         checkBox = findViewById(R.id.Pay_checkbox);
     }
 }

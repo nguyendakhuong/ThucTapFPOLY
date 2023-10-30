@@ -93,7 +93,6 @@ public class CodeFragment extends Fragment implements ItemDiscountListener {
         bundle.putString("discountName",discount.getDc_name());
         bundle.putString("discountCode",discount.getDc_code());
         bundle.putString("discountNote",discount.getDc_note());
-        bundle.putString("discountImage",discount.getDc_img());
         bundle.putString("discountTime",discount.getDc_time());
         bundle.putInt("discountQuantity",discount.getDc_quantity());
         bundle.putInt("discountPrice",discount.getDc_price());

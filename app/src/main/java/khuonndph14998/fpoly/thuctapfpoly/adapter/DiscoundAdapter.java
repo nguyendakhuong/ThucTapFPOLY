@@ -38,9 +38,6 @@ public class DiscoundAdapter extends RecyclerView.Adapter<DiscoundAdapter.Discou
     @Override
     public void onBindViewHolder(@NonNull DiscoundAdapter.DiscoundViewHolder holder, int position) {
         Discount dc = productArrayList.get(position);
-        String urlString = dc.getDc_img();
-        Uri uri = Uri.parse(urlString);
-        holder.dc_image.setImageURI(uri);
 
         holder.tv_discountName.setText(dc.getDc_name());
         holder.tv_discountQuantity.setText(String.valueOf(dc.getDc_quantity()));
@@ -56,11 +53,9 @@ public class DiscoundAdapter extends RecyclerView.Adapter<DiscoundAdapter.Discou
     }
 
     public class DiscoundViewHolder extends RecyclerView.ViewHolder {
-        private ImageView dc_image;
         private TextView tv_discountName,tv_discountQuantity,tv_discountCode,tv_discountTime;
         public DiscoundViewHolder(@NonNull View itemView) {
             super(itemView);
-            dc_image = itemView.findViewById(R.id.item_discountImage);
             tv_discountName = itemView.findViewById(R.id.item_discountName);
             tv_discountQuantity = itemView.findViewById(R.id.item_discountQuantity);
             tv_discountCode = itemView.findViewById(R.id.item_discountCode);

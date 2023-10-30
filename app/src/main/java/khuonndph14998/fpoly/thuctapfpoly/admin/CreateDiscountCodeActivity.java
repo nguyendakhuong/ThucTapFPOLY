@@ -44,7 +44,6 @@ public class CreateDiscountCodeActivity extends AppCompatActivity {
     private Button btnDatePicker,btnDiscount;
     private Calendar calendar;
     private String selectedDate = "";
-    private Uri imageUri;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -64,12 +63,6 @@ public class CreateDiscountCodeActivity extends AppCompatActivity {
                 createDiscount();
             }
         });
-        imageViewDiscount.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                requestPermissions();
-            }
-        });
     }
 
     private void anhxa(){
@@ -79,7 +72,6 @@ public class CreateDiscountCodeActivity extends AppCompatActivity {
         input_Discount = findViewById(R.id.input_discount);
         input_DiscountPrice = findViewById(R.id.input_price);
         tv_datePicker = findViewById(R.id.tv_datePicker);
-        imageViewDiscount = findViewById(R.id.imageView_discount);
         btnDatePicker = findViewById(R.id.btnDatePicker);
         btnDiscount = findViewById(R.id.btn_CreateCode);
 
@@ -150,12 +142,7 @@ public class CreateDiscountCodeActivity extends AppCompatActivity {
             Toast.makeText(this, "Giá tiền phải lớn hơn 0", Toast.LENGTH_SHORT).show();
             return;
         }
-        if (imageUri == null) {
-            Toast.makeText(CreateDiscountCodeActivity.this, "Vui lòng chọn ảnh", Toast.LENGTH_SHORT).show();
-            return;
-        }
-        String imagePath = imageUri.toString();
-        Discount dc = new Discount(name,discount,selectedDate,note,imagePath,quantityInt,priceInt);
+        Discount dc = new Discount(name,discount,selectedDate,note,quantityInt,priceInt);
         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("Discount");
         databaseReference.orderByChild("discount").equalTo(discount).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -186,20 +173,7 @@ public class CreateDiscountCodeActivity extends AppCompatActivity {
             }
         });
     }
-    private void requestPermissions() {
-        ImagePicker.with(this)
-                .crop()	    			//Crop image(Optional), Check Customization for more option
-                .compress(1024)			//Final image size will be less than 1 MB(Optional)
-                .maxResultSize(1080, 1080)	//Final image resolution will be less than 1080 x 1080(Optional)
-                .start();
-    }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        imageUri = data.getData();
-        imageViewDiscount.setImageURI(imageUri);
-    }
     private void clearForm(){
         processSelectedDate();
         input_DiscountName.setText("");
@@ -208,6 +182,5 @@ public class CreateDiscountCodeActivity extends AppCompatActivity {
         input_DiscountQuantity.setText("");
         input_DiscountPrice.setText("");
         tv_datePicker.setText("");
-        imageViewDiscount.setImageResource(R.drawable.ic_baseline_image);
     }
 }

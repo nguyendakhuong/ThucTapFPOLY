@@ -36,7 +36,6 @@ import khuonndph14998.fpoly.thuctapfpoly.UpdateProductActivity;
 
 public class DiscountDetailActivity extends AppCompatActivity {
     private TextView tv_discountName,tv_discountCode,tv_discountQuantity,tv_discountTime,tv_discountPrice,tv_discountNote;
-    private ImageView img_discount;
     private Button btn_updateDiscount, btn_deleteDiscount;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,15 +49,12 @@ public class DiscountDetailActivity extends AppCompatActivity {
             String name = extras.getString("discountName");
             String quantity = String.valueOf(extras.getInt("discountQuantity"));
             String price = String.valueOf(extras.getInt("discountPrice"));
-            String urlString = extras.getString("discountImage");
-            Uri uri = Uri.parse(urlString);
             tv_discountName.setText(extras.getString("discountName"));
             tv_discountCode.setText(extras.getString("discountCode"));
             tv_discountNote.setText(extras.getString("discountNote"));
             tv_discountQuantity.setText(String.valueOf(extras.getInt("discountQuantity")));
             tv_discountPrice.setText(String.valueOf(extras.getInt("discountPrice")));
             tv_discountTime.setText(extras.getString("discountTime"));
-            img_discount.setImageURI(uri);
 
             btn_deleteDiscount.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -83,7 +79,6 @@ public class DiscountDetailActivity extends AppCompatActivity {
         tv_discountPrice = findViewById(R.id.tv_detailDiscountPrice);
         tv_discountTime = findViewById(R.id.tv_detailDiscountTime);
         tv_discountNote = findViewById(R.id.tv_detailDiscountNote);
-        img_discount = findViewById(R.id.detail_discount_image);
         btn_updateDiscount = findViewById(R.id.detail_discount_update);
         btn_deleteDiscount = findViewById(R.id.detail_discount_delete);
     }
