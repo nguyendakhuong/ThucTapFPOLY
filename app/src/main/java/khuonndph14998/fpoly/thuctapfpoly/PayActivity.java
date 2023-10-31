@@ -45,12 +45,15 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import khuonndph14998.fpoly.thuctapfpoly.adapter.DetailPayAdapter;
 import khuonndph14998.fpoly.thuctapfpoly.adapter.PayAdapter;
 import khuonndph14998.fpoly.thuctapfpoly.detail.DiscountDetailActivity;
+import khuonndph14998.fpoly.thuctapfpoly.model.Bill;
 import khuonndph14998.fpoly.thuctapfpoly.model.Discount;
 import khuonndph14998.fpoly.thuctapfpoly.model.InfoUser;
 import khuonndph14998.fpoly.thuctapfpoly.model.Product;
@@ -68,7 +71,8 @@ public class PayActivity extends AppCompatActivity{
     String discountCodeStr;
 
     private int reducedMoney = 0;
-
+    int newTotal;
+    String address;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -98,7 +102,7 @@ public class PayActivity extends AppCompatActivity{
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
                     InfoUser infoUser = snapshot.getValue(InfoUser.class);
                     if (infoUser != null) {
-                        String address = infoUser.getDeliveryAddress();
+                        address = infoUser.getDeliveryAddress();
                         tv_address.setText(address);
                     }
                 }
@@ -273,6 +277,7 @@ public class PayActivity extends AppCompatActivity{
                     deleteQuantityProduct();
                     UseDiscountCode();
                     deleteQuantityDiscountCode();
+                    createBill();
                     AlertDialog.Builder builder = new AlertDialog.Builder(PayActivity.this);
                     builder.setTitle("Thông báo")
                             .setMessage("Đặt hàng thành công!")
@@ -281,6 +286,7 @@ public class PayActivity extends AppCompatActivity{
                                 public void onClick(DialogInterface dialog, int which) {
                                     Intent i = new Intent(PayActivity.this,MainActivity.class);
                                     startActivity(i);
+                                    finish();
                                 }
                             }).show();
                 } else {
@@ -305,6 +311,29 @@ public class PayActivity extends AppCompatActivity{
             }
         });
     }
+    private void createBill(){
+        String userEmail = getCurrentUserEmail();
+        if(userEmail != null) {
+            String emailPath = userEmail.replace("@gmail.com", "");
+            DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("Bill");
+            List<Product> productList = adapter.getProductList();
+            String billId = databaseReference.push().getKey();
+            Date currentTime = new Date();
+            SimpleDateFormat sdf = new SimpleDateFormat("H:mm dd/MM/yyyy");
+            String formattedTime = sdf.format(currentTime);
+
+            List<String> productNameList = new ArrayList<>();
+            List<String> productCode = new ArrayList<>();
+            List<Integer> quantityList = new ArrayList<>();
+            for (Product product : productList) {
+                productCode.add(product.getCode());
+                productNameList.add(product.getName());
+                quantityList.add(product.getNumber());
+            }
+            Bill bill = new Bill(billId,newTotal,emailPath,address,formattedTime,productNameList,productCode,quantityList);
+            databaseReference.child(billId).setValue(bill);
+        }
+    }
     public void totalPrice (int reducedMoney) {
         List<Product> listProduct = adapter.getProductList();
         int totalPay = 0;
@@ -315,7 +344,7 @@ public class PayActivity extends AppCompatActivity{
             totalPay += productTotalPrice;
         }
 
-        int newTotal = totalPay - reducedMoney;
+        newTotal = totalPay - reducedMoney;
         if (newTotal < 0) {
             tv_totalPay.setText(String.valueOf(0));
             return;
@@ -343,7 +372,9 @@ public class PayActivity extends AppCompatActivity{
         }
     }
     public void deleteQuantityDiscountCode(){
-        Log.d("tag",discountCodeStr);
+        if (discountCodeStr == null || discountCodeStr.isEmpty()) {
+            return;
+        }
         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("Discount");
         databaseReference.child(discountCodeStr).runTransaction(new Transaction.Handler() {
             @NonNull

@@ -12,9 +12,9 @@
             android:icon="@drawable/ic_baseline_playlist_add"
             android:title="Sản phẩm" />
         <item
-            android:id="@+id/admin_chat"
-            android:icon="@drawable/ic_baseline_chat_24"
-            android:title="Nhắn tin" />
+            android:id="@+id/admin_bill"
+            android:icon="@drawable/icons_bill"
+            android:title="Hóa đơn" />
         <item
             android:id="@+id/admin_code"
             android:icon="@drawable/ic_baseline_discount_24"
