@@ -16,8 +16,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 import khuonndph14998.fpoly.thuctapfpoly.R;
-import khuonndph14998.fpoly.thuctapfpoly.fragmentadmin.listener.ButtonClickListenerCardPay;
-import khuonndph14998.fpoly.thuctapfpoly.fragmentadmin.listener.TotalPriceListener;
+import khuonndph14998.fpoly.thuctapfpoly.listener.ButtonClickListenerCardPay;
+import khuonndph14998.fpoly.thuctapfpoly.listener.TotalPriceListener;
 import khuonndph14998.fpoly.thuctapfpoly.model.Product;
 
 public class CardPayAdapter extends RecyclerView.Adapter<CardPayAdapter.CardPayViewHolder>{

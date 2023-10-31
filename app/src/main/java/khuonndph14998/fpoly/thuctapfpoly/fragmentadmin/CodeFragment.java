@@ -27,7 +27,7 @@ import khuonndph14998.fpoly.thuctapfpoly.R;
 import khuonndph14998.fpoly.thuctapfpoly.adapter.DiscoundAdapter;
 import khuonndph14998.fpoly.thuctapfpoly.admin.CreateDiscountCodeActivity;
 import khuonndph14998.fpoly.thuctapfpoly.detail.DiscountDetailActivity;
-import khuonndph14998.fpoly.thuctapfpoly.fragmentadmin.listener.ItemDiscountListener;
+import khuonndph14998.fpoly.thuctapfpoly.listener.ItemDiscountListener;
 import khuonndph14998.fpoly.thuctapfpoly.model.Discount;
 
 public class CodeFragment extends Fragment implements ItemDiscountListener {

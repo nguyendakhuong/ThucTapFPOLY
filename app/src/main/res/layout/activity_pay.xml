@@ -25,14 +25,14 @@
         android:orientation="horizontal"
         android:layout_gravity="end"
         android:layout_marginHorizontal="10dp">
-        <EditText
+        <TextView
             android:layout_marginRight="10dp"
-            android:id="@+id/ed_code"
-            android:layout_width="150dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:hint="Mã"/>
+            android:text=""
+            android:id="@+id/tv_discount"
+            android:textSize="14sp"/>
         <Button
-
             android:id="@+id/btn_code"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -43,7 +43,7 @@
         android:layout_gravity="end"
         android:id="@+id/rcv_pay"
         android:layout_width="300dp"
-        android:layout_height="200dp" />
+        android:layout_height="wrap_content" />
     <LinearLayout
         android:layout_gravity="end"
         android:layout_marginHorizontal="10dp"
@@ -59,7 +59,7 @@
             android:layout_marginLeft="10dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="20"/>
+            android:text="0"/>
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

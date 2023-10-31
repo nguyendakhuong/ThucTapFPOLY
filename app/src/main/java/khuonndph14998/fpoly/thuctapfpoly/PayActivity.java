@@ -1,24 +1,34 @@
 package khuonndph14998.fpoly.thuctapfpoly;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserInfo;
@@ -26,7 +36,9 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.MutableData;
 import com.google.firebase.database.Query;
+import com.google.firebase.database.Transaction;
 import com.google.firebase.database.ValueEventListener;
 
 import org.json.JSONArray;
@@ -38,6 +50,7 @@ import java.util.List;
 
 import khuonndph14998.fpoly.thuctapfpoly.adapter.DetailPayAdapter;
 import khuonndph14998.fpoly.thuctapfpoly.adapter.PayAdapter;
+import khuonndph14998.fpoly.thuctapfpoly.detail.DiscountDetailActivity;
 import khuonndph14998.fpoly.thuctapfpoly.model.Discount;
 import khuonndph14998.fpoly.thuctapfpoly.model.InfoUser;
 import khuonndph14998.fpoly.thuctapfpoly.model.Product;
@@ -45,17 +58,16 @@ import khuonndph14998.fpoly.thuctapfpoly.user.InfoUserActivity;
 
 public class PayActivity extends AppCompatActivity{
 
-    EditText ed_code;
     Button btn_code,btn_Pay;
-    TextView tvCode_sale,tv_totalPay,tv_address;
+    TextView tvCode_sale,tv_totalPay,tv_address,tv_discount;
     CheckBox checkBox;
 
     RecyclerView rcv_itemPay,rcv_pay;
     PayAdapter adapter;
     DetailPayAdapter detailPayAdapter;
+    String discountCodeStr;
 
-    int totalPay = 0;
-    private int reducedMoney;
+    private int reducedMoney = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -97,50 +109,12 @@ public class PayActivity extends AppCompatActivity{
                 }
             });
         }
+        totalPrice(reducedMoney);
 
         btn_code.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String discountCode = ed_code.getText().toString().trim();
-                String userEmail = getCurrentUserEmail();
-                if (userEmail != null){
-                    String emailPath = userEmail.replace("@gmail.com", "");
-                    String databasePath ="/Users/"+ emailPath + "/MyDiscount";
-                    DatabaseReference dataRef = FirebaseDatabase.getInstance().getReference(databasePath);
-                    dataRef.addListenerForSingleValueEvent(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(@NonNull DataSnapshot snapshot) {
-                            if(snapshot.hasChild(discountCode)){
-                                Toast.makeText(PayActivity.this, "Mã đã được bạn sử dụng", Toast.LENGTH_SHORT).show();
-                            }else {
-                                DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("Discount");
-                                Query query = databaseReference.orderByChild("dc_code").equalTo(discountCode);
-                                query.addListenerForSingleValueEvent(new ValueEventListener() {
-                                    @Override
-                                        public void onDataChange(@NonNull DataSnapshot snapshot) {
-                                        for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
-                                        Discount discount = dataSnapshot.getValue(Discount.class);
-                                            if (discount != null) {
-                                                reducedMoney = discount.getDc_price();
-                                            }
-                                        }
-                                        tvCode_sale.setText(String.valueOf(reducedMoney));
-                                        totalPrice(reducedMoney);
-                                    }
-                                    @Override
-                                    public void onCancelled(@NonNull DatabaseError error) {
-                                        Toast.makeText(PayActivity.this, "Mã không tồn tại", Toast.LENGTH_SHORT).show();
-                                    }
-                                });
-                            }
-                        }
-                        @Override
-                        public void onCancelled(@NonNull DatabaseError error) {
-
-                        }
-                    });
-                }
-
+                openDiscountCodeDialog(Gravity.CENTER);
             }
         });
         btn_Pay.setOnClickListener(new View.OnClickListener() {
@@ -154,6 +128,91 @@ public class PayActivity extends AppCompatActivity{
             }
         });
 
+    }
+    private void openDiscountCodeDialog(int gravity){
+        final Dialog dialog = new Dialog(this);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.layout_dialog_discount_code);
+
+        Window window = dialog.getWindow();
+        if (window == null) {
+            return;
+        }
+        window.setLayout(WindowManager.LayoutParams.MATCH_PARENT,WindowManager.LayoutParams.WRAP_CONTENT);
+        window.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
+        WindowManager.LayoutParams layoutParams = window.getAttributes();
+        layoutParams.gravity = gravity;
+        window.setAttributes(layoutParams);
+        dialog.setCancelable(true);
+
+        TextInputEditText input_discountCode;
+        Button btnCancel,btnOk;
+
+        input_discountCode = dialog.findViewById(R.id.input_discount);
+        btnCancel = dialog.findViewById(R.id.btn_discount_cancel);
+        btnOk = dialog.findViewById(R.id.btn_discount_ok);
+
+        btnCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+        btnOk.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                discountCodeStr = input_discountCode.getText().toString().trim();
+                if (TextUtils.isEmpty(discountCodeStr)) {
+                    Toast.makeText(PayActivity.this, "Vui lòng nhập mã giảm giá", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                String userEmail = getCurrentUserEmail();
+                if (userEmail != null){
+                    String emailPath = userEmail.replace("@gmail.com", "");
+                    String databasePath ="/Users/"+ emailPath + "/MyDiscount";
+                    DatabaseReference dataRef = FirebaseDatabase.getInstance().getReference(databasePath);
+                    dataRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                            if(snapshot.hasChild(discountCodeStr)){
+                                Toast.makeText(PayActivity.this, "Mã đã được bạn sử dụng", Toast.LENGTH_SHORT).show();
+                            }else {
+                                DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("Discount");
+                                Query query = databaseReference.orderByChild("dc_code").equalTo(discountCodeStr);
+                                query.addListenerForSingleValueEvent(new ValueEventListener() {
+                                    @Override
+                                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                        for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
+                                        Discount discount = dataSnapshot.getValue(Discount.class);
+                                            if (discount != null) {
+                                                reducedMoney = discount.getDc_price();
+                                            }
+                                        }
+                                        tvCode_sale.setText(String.valueOf(reducedMoney));
+                                        totalPrice(reducedMoney);
+                                        btn_code.setEnabled(false);
+                                        Toast.makeText(PayActivity.this, "Nhận code thành công", Toast.LENGTH_SHORT).show();
+                                        dialog.dismiss();
+                                        tv_discount.setText(discountCodeStr);
+                                    }
+                                    @Override
+                                    public void onCancelled(@NonNull DatabaseError error) {
+                                        Toast.makeText(PayActivity.this, "Mã không tồn tại", Toast.LENGTH_SHORT).show();
+                                        dialog.dismiss();
+                                    }
+                                });
+                            }
+                        }
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError error) {
+                            dialog.dismiss();
+                        }
+                    });
+                }
+            }
+        });
+        dialog.show();
     }
     private List<Product> convertJsonToProductList(String json) {
         List<Product> productList = new ArrayList<>();
@@ -187,6 +246,20 @@ public class PayActivity extends AppCompatActivity{
         }
     }
 
+    public void UseDiscountCode(){
+        if (discountCodeStr == null || discountCodeStr.isEmpty()) {
+            return;
+        }
+        String userEmail = getCurrentUserEmail();
+        if (userEmail != null) {
+            String emailPath = userEmail.replace("@gmail.com", "");
+            String databasePath = "/Users/" + emailPath + "/MyDiscount";
+            DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference(databasePath);
+            DatabaseReference discountCodeRef = databaseReference.child(discountCodeStr);
+            discountCodeRef.setValue(discountCodeStr);
+        }
+    }
+
     public void checkAddress () {
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         String userEmail = getCurrentUserEmail();
@@ -198,6 +271,8 @@ public class PayActivity extends AppCompatActivity{
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if (snapshot.exists()) {
                     deleteQuantityProduct();
+                    UseDiscountCode();
+                    deleteQuantityDiscountCode();
                     AlertDialog.Builder builder = new AlertDialog.Builder(PayActivity.this);
                     builder.setTitle("Thông báo")
                             .setMessage("Đặt hàng thành công!")
@@ -232,13 +307,20 @@ public class PayActivity extends AppCompatActivity{
     }
     public void totalPrice (int reducedMoney) {
         List<Product> listProduct = adapter.getProductList();
+        int totalPay = 0;
         for (Product product : listProduct) {
             int productPrice = product.getPrice();
             int productNumber = product.getNumber();
             int productTotalPrice = productPrice * productNumber;
             totalPay += productTotalPrice;
         }
-        tv_totalPay.setText(String.valueOf(totalPay));
+
+        int newTotal = totalPay - reducedMoney;
+        if (newTotal < 0) {
+            tv_totalPay.setText(String.valueOf(0));
+            return;
+        }
+        tv_totalPay.setText(String.valueOf(newTotal));
     }
     public void deleteQuantityProduct(){
         List<Product> productList = adapter.getProductList();
@@ -260,10 +342,41 @@ public class PayActivity extends AppCompatActivity{
             productCodeRef.removeValue();
         }
     }
+    public void deleteQuantityDiscountCode(){
+        Log.d("tag",discountCodeStr);
+        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("Discount");
+        databaseReference.child(discountCodeStr).runTransaction(new Transaction.Handler() {
+            @NonNull
+            @Override
+            public Transaction.Result doTransaction(@NonNull MutableData currentData) {
+                Discount discount = currentData.getValue(Discount.class);
+                if ( discount == null ){
+                    return Transaction.success(currentData);
+                }
+                int newQuantity = discount.getDc_quantity() - 1;
+                if (newQuantity < 0) {
+                    newQuantity = 0;
+                }
+
+                discount.setDc_quantity(newQuantity);
+                currentData.setValue(discount);
+                return Transaction.success(currentData);
+            }
+
+            @Override
+            public void onComplete(@Nullable DatabaseError error, boolean committed, @Nullable DataSnapshot currentData) {
+                if (committed) {
+                    Log.d("tag", "Quantity updated successfully");
+                } else {
+                    Log.d("tag", "Quantity update failed");
+                }
+            }
+        });
+    }
     public void anhxa(){
         rcv_itemPay = findViewById(R.id.rcv_itemPay);
         rcv_pay = findViewById(R.id.rcv_pay);
-        ed_code = findViewById(R.id.ed_code);
+        tv_discount = findViewById(R.id.tv_discount);
         btn_code = findViewById(R.id.btn_code);
         btn_Pay = findViewById(R.id.btn_Pay);
         tvCode_sale = findViewById(R.id.tvCode_sale);

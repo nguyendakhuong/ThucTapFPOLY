@@ -29,7 +29,7 @@ import java.util.List;
 import java.util.Map;
 
 import khuonndph14998.fpoly.thuctapfpoly.R;
-import khuonndph14998.fpoly.thuctapfpoly.fragmentadmin.listener.ItemProductListener;
+import khuonndph14998.fpoly.thuctapfpoly.listener.ItemProductListener;
 import khuonndph14998.fpoly.thuctapfpoly.model.Product;
 
 public class CardProductAdapter extends RecyclerView.Adapter<CardProductAdapter.CardProductViewHolder> {

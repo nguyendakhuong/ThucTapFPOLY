@@ -31,7 +31,7 @@ import java.util.List;
 import khuonndph14998.fpoly.thuctapfpoly.R;
 import khuonndph14998.fpoly.thuctapfpoly.adapter.FavAdapter;
 import khuonndph14998.fpoly.thuctapfpoly.detail.UserProductDetailActivity;
-import khuonndph14998.fpoly.thuctapfpoly.fragmentadmin.listener.ItemFavListener;
+import khuonndph14998.fpoly.thuctapfpoly.listener.ItemFavListener;
 import khuonndph14998.fpoly.thuctapfpoly.model.Product;
 
 

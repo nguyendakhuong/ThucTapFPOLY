@@ -1,11 +1,9 @@
 package khuonndph14998.fpoly.thuctapfpoly.adapter;
 
 import android.content.Context;
-import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -14,7 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 
 import khuonndph14998.fpoly.thuctapfpoly.R;
-import khuonndph14998.fpoly.thuctapfpoly.fragmentadmin.listener.ItemDiscountListener;
+import khuonndph14998.fpoly.thuctapfpoly.listener.ItemDiscountListener;
 import khuonndph14998.fpoly.thuctapfpoly.model.Discount;
 
 public class DiscoundAdapter extends RecyclerView.Adapter<DiscoundAdapter.DiscoundViewHolder>{

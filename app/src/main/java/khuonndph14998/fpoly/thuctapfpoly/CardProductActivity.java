@@ -31,7 +31,7 @@
     import java.util.ArrayList;
     import java.util.List;
     import khuonndph14998.fpoly.thuctapfpoly.adapter.CardPayAdapter;
-    import khuonndph14998.fpoly.thuctapfpoly.fragmentadmin.listener.TotalPriceListener;
+    import khuonndph14998.fpoly.thuctapfpoly.listener.TotalPriceListener;
     import khuonndph14998.fpoly.thuctapfpoly.model.Product;
 
     public class CardProductActivity extends AppCompatActivity implements TotalPriceListener {

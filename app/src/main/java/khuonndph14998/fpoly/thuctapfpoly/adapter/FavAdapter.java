@@ -15,7 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 
 import khuonndph14998.fpoly.thuctapfpoly.R;
-import khuonndph14998.fpoly.thuctapfpoly.fragmentadmin.listener.ItemFavListener;
+import khuonndph14998.fpoly.thuctapfpoly.listener.ItemFavListener;
 import khuonndph14998.fpoly.thuctapfpoly.model.Product;
 
 public class FavAdapter extends RecyclerView.Adapter<FavAdapter.FavViewHolder>  {

@@ -28,7 +28,7 @@ import khuonndph14998.fpoly.thuctapfpoly.CreateProductActivity;
 import khuonndph14998.fpoly.thuctapfpoly.R;
 import khuonndph14998.fpoly.thuctapfpoly.adapter.ProductAdapter;
 import khuonndph14998.fpoly.thuctapfpoly.detail.AdminProductDetailActivity;
-import khuonndph14998.fpoly.thuctapfpoly.fragmentadmin.listener.ItemProductListener;
+import khuonndph14998.fpoly.thuctapfpoly.listener.ItemProductListener;
 import khuonndph14998.fpoly.thuctapfpoly.model.Product;
 
 public class ProductFragment extends Fragment implements ItemProductListener {

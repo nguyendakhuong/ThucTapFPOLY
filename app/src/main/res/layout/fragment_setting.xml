@@ -55,7 +55,7 @@
             android:layout_marginVertical="10dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Mã giảm giá của bạn"
+            android:text="Hóa đơn"
             android:id="@+id/btn_setting_discount"/>
         <Button
             android:layout_width="match_parent"
@@ -63,7 +63,7 @@
             android:text="Thông tin người dùng"
             android:id="@+id/btnUserInfo"/>
         <TextView
-            android:layout_marginTop="150dp"
+            android:layout_marginTop="20dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Tài khoản"
@@ -75,7 +75,12 @@
             android:text="Đổi mật khẩu"
             android:id="@+id/btn_setting_account"/>
         <Button
-            android:layout_marginTop="10dp"
+            android:layout_marginVertical="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Xóa tài khoản"
+            android:id="@+id/btn_setting_deleteAccount"/>
+        <Button
             android:id="@+id/fragment_button_logout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
