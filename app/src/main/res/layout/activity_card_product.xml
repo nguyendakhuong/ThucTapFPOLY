@@ -17,6 +17,7 @@
         android:layout_marginVertical="15dp"
         android:layout_marginLeft="10dp"/>
     <androidx.recyclerview.widget.RecyclerView
+        android:padding="10dp"
         android:layout_weight="1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -37,15 +38,22 @@
             android:id="@+id/tv_total"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="N/a"
+            android:text="0"
             android:textSize="20dp"
             android:layout_marginLeft="5dp"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="đ"
+            android:textSize="20dp"/>
     </LinearLayout>
     <Button
         android:id="@+id/btnPay"
+        android:textColor="@color/white"
+        android:background="@drawable/bg_button_blue_conner_16"
         android:layout_marginHorizontal="20dp"
         android:layout_marginBottom="10dp"
-        android:layout_width="wrap_content"
+        android:layout_width="120dp"
         android:layout_height="wrap_content"
         android:text="Thanh toán"
         android:layout_gravity="end"/>

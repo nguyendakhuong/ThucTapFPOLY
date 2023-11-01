@@ -12,13 +12,14 @@
         android:layout_marginBottom="10dp"
         android:orientation="vertical">
         <TextView
+
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Messages"
             android:layout_gravity="center"
             android:layout_marginVertical="20dp"
             android:textSize="18sp"
-            android:textColor="@color/black"/>
+            android:textColor="@color/color_blue"/>
     </LinearLayout>
     <androidx.recyclerview.widget.RecyclerView
         android:layout_weight="1"

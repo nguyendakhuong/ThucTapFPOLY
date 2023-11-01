@@ -59,6 +59,13 @@
             android:text=""
             android:layout_marginLeft="5dp"
             android:textColor="@android:color/black"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:textAppearanceMedium"
+            android:text="đ"
+            android:layout_marginLeft="5dp"
+            android:textColor="@android:color/black"/>
     </LinearLayout>
     <LinearLayout
         android:layout_marginVertical="10dp"

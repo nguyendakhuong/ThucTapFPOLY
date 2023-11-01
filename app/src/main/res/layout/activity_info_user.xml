@@ -12,7 +12,7 @@
         android:text="Thông tin khách hàng"
         android:textSize="24dp"
         android:textColor="@color/black"
-        android:layout_gravity="center"
+        android:layout_marginLeft="10dp"
         android:layout_marginVertical="20dp"/>
 
     <com.google.android.material.textfield.TextInputLayout
@@ -83,6 +83,8 @@
             android:maxHeight="120dp" />
     </com.google.android.material.textfield.TextInputLayout>
     <Button
+        android:background="@drawable/bg_button_blue_conner_16"
+        android:textColor="@color/white"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Xác nhận"

@@ -11,8 +11,8 @@ import android.widget.TextView;
 import khuonndph14998.fpoly.thuctapfpoly.R;
 
 public class UserProductDetailActivity extends AppCompatActivity {
-    private TextView detailName, detailDescribe, detailNote, detailQuantity, detailCategory,detailPrice,like,dislike;
-    private ImageView detailImage,imgLike,imgDislike;
+    private TextView detailName, detailDescribe, detailNote, detailQuantity, detailCategory,detailPrice;
+    private ImageView detailImage;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -42,10 +42,7 @@ public class UserProductDetailActivity extends AppCompatActivity {
         detailQuantity = findViewById(R.id.detail_user_quantity);
         detailCategory = findViewById(R.id.detail_user_category);
         detailPrice = findViewById(R.id.detail_user_price);
-        like = findViewById(R.id.detail_user_like_text);
-        dislike = findViewById(R.id.detail_user_dislike_text);
         detailImage = findViewById(R.id.detail_user_image);
-        imgLike = findViewById(R.id.detail_user_like);
-        imgDislike = findViewById(R.id.detail_user_dislike);
+
     }
 }

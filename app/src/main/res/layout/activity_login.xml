@@ -7,15 +7,22 @@
     tools:context=".auth.LoginActivity"
     android:orientation="vertical">
 
+
+    <ImageView
+        android:layout_marginTop="30dp"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        android:src="@drawable/icons_shop_online"
+        android:layout_gravity="center"/>
+
     <TextView
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Login"
+        android:textSize="24sp"
+        android:text="Shop Online"
+        android:textColor="@color/black"
         android:layout_gravity="center"
-        android:gravity="center"
-        android:textSize="20dp"
-        android:layout_margin="100dp"/>
-    
+        android:layout_marginVertical="20dp"/>
 
     <com.google.android.material.textfield.TextInputLayout
         android:layout_width="match_parent"
@@ -45,8 +52,9 @@
         android:text="Quên mật khẩu !"
         android:layout_gravity="end"
         android:layout_marginHorizontal="20dp"
-        android:id="@+id/forgotPw"/>
-
+        android:id="@+id/forgotPw"
+        android:textColor="@color/color_blue"
+        android:textStyle="bold"/>
     <ProgressBar
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -54,18 +62,34 @@
         android:visibility="gone"/>
     <Button
         android:layout_marginTop="20dp"
-        android:layout_width="wrap_content"
+        android:layout_width="200dp"
         android:layout_height="wrap_content"
         android:text="Đăng nhập"
         android:layout_gravity="center"
-        android:id="@+id/btn_login"/>
-    <TextView
-        android:id="@+id/text_toRegister"
+        android:id="@+id/btn_login"
+        android:background="@drawable/bg_button_blue_conner_16"
+        android:textColor="@color/white"/>
+    <LinearLayout
         android:layout_marginTop="10dp"
-        android:layout_width="wrap_content"
+        android:gravity="center"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Nếu chưa có tài khoản! Đăng ký ngay"
-        android:layout_gravity="center"/>
+        android:orientation="horizontal">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Nếu chưa có tài khoản !"
+            android:layout_gravity="center"/>
+        <TextView
+            android:layout_marginLeft="5dp"
+            android:id="@+id/text_toRegister"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Đăng ký ngay"
+            android:layout_gravity="center"
+            android:textColor="@color/color_blue"/>
+    </LinearLayout>
+
 
 
 

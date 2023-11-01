@@ -100,14 +100,18 @@
         android:orientation="horizontal"
         android:gravity="end">
         <Button
+            android:background="@drawable/bg_button_blue_conner_16"
+            android:textColor="@color/white"
             android:id="@+id/detail_discount_update"
-            android:layout_width="wrap_content"
+            android:layout_width="120dp"
             android:layout_height="wrap_content"
             android:text="sửa"
             android:layout_marginHorizontal="10dp" />
         <Button
+            android:background="@drawable/bg_button_blue_conner_16"
+            android:textColor="@color/white"
             android:id="@+id/detail_discount_delete"
-            android:layout_width="wrap_content"
+            android:layout_width="120dp"
             android:layout_height="wrap_content"
             android:text="Xóa"
             android:layout_marginHorizontal="10dp" />

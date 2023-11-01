@@ -12,10 +12,11 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Đội hỗ trợ mua sắm tư vấn"
-        android:textSize="18sp"
+        android:textSize="24sp"
         android:textColor="@color/black"
         android:layout_marginHorizontal="20dp"
-        android:layout_marginTop="10dp"/>
+        android:layout_marginVertical="20dp"
+        android:textStyle="bold"/>
     <LinearLayout
         android:layout_marginVertical="10dp"
         android:layout_width="match_parent"

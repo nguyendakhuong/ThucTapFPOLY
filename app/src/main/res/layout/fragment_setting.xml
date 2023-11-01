@@ -6,8 +6,6 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".fragment.SettingFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -36,11 +34,10 @@
                     android:layout_height="wrap_content"
                     android:text="Xin chào "
                     android:textSize="20dp"/>
-                <TextView
-                    android:id="@+id/tv_setting_name"
+                <TextView android:id="@+id/tv_setting_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Khương"
+                android:text=""
                 android:textSize="20dp"/>
             </LinearLayout>
         </LinearLayout>
@@ -52,12 +49,18 @@
             android:textSize="16dp"/>
 
         <Button
+            android:background="@drawable/bg_button_setting"
+            android:textColor="@color/purple_500"
+            android:textStyle="bold"
             android:layout_marginVertical="10dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Hóa đơn"
             android:id="@+id/btn_setting_Bill"/>
         <Button
+            android:background="@drawable/bg_button_setting"
+            android:textColor="@color/purple_500"
+            android:textStyle="bold"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Thông tin người dùng"
@@ -68,19 +71,29 @@
             android:layout_height="wrap_content"
             android:text="Tài khoản"
             android:textSize="16dp"
-            android:textColor="@color/black"/>
+            android:textColor="@color/black"
+            android:layout_marginBottom="10dp"/>
         <Button
+            android:background="@drawable/bg_button_setting"
+            android:textColor="@color/purple_500"
+            android:textStyle="bold"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Đổi mật khẩu"
             android:id="@+id/btn_setting_account"/>
         <Button
+            android:background="@drawable/bg_button_setting"
+            android:textColor="@color/purple_500"
+            android:textStyle="bold"
             android:layout_marginVertical="10dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Xóa tài khoản"
             android:id="@+id/btn_setting_deleteAccount"/>
         <Button
+            android:background="@drawable/bg_button_setting"
+            android:textColor="@color/purple_500"
+            android:textStyle="bold"
             android:id="@+id/fragment_button_logout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

@@ -14,7 +14,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:menu="@menu/bottom_nav_menu"
-        android:background="@color/cardview_shadow_start_color">
+        android:background="@color/color_blue">
     </com.google.android.material.bottomnavigation.BottomNavigationView>
 
     <FrameLayout

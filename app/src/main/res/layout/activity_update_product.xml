@@ -8,10 +8,10 @@
     android:orientation="vertical"
     android:layout_marginHorizontal="10dp">
     <TextView
+        android:layout_marginTop="10dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Update Producr"
-        android:textStyle="bold"
         android:textColor="@color/black"
         android:textSize="25dp" />
     <com.google.android.material.textfield.TextInputLayout
@@ -42,7 +42,7 @@
                 android:id="@+id/tv_update_code"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="mãaaaaaaaaaaaaaaaaa"
+                android:text="a"
                 android:layout_gravity="center"/>
         </LinearLayout>
 
@@ -117,6 +117,8 @@
         android:visibility="gone"
         android:layout_gravity="center"/>
     <Button
+        android:background="@drawable/bg_button_blue_conner_16"
+        android:textColor="@color/white"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Cập nhật"
