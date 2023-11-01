@@ -29,6 +29,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
+import khuonndph14998.fpoly.thuctapfpoly.MainActivity;
 import khuonndph14998.fpoly.thuctapfpoly.R;
 import khuonndph14998.fpoly.thuctapfpoly.admin.CreateAdminActivity;
 
@@ -41,16 +42,16 @@ public class RegisterActivity extends AppCompatActivity {
     ProgressBar progressBar;
     FirebaseFirestore fstore;
 
-//    @Override
-//    protected void onStart() {
-//        super.onStart();
-//        FirebaseUser user = fAuth.getCurrentUser();
-//        if (user != null){
-//            Intent i = new Intent(getApplicationContext(), MainActivity.class);
-//            startActivity(i);
-//            finish();
-//        }
-//    }
+    @Override
+    protected void onStart() {
+        super.onStart();
+        FirebaseUser user = fAuth.getCurrentUser();
+        if (user != null){
+            Intent i = new Intent(getApplicationContext(), MainActivity.class);
+            startActivity(i);
+            finish();
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -134,9 +135,7 @@ public class RegisterActivity extends AppCompatActivity {
                     @Override
                     public void onIdTokenChanged(@NonNull FirebaseAuth firebaseAuth) {
                         FirebaseUser user = firebaseAuth.getCurrentUser();
-
                         if (user != null && user.isEmailVerified()) {
-                            // Người dùng đã xác thực email, lưu dữ liệu vào Firestore
                             DocumentReference df = fstore.collection("account").document(user.getUid());
                             Map<String, Object> userInfo = new HashMap<>();
                             userInfo.put("id",id);
@@ -151,9 +150,6 @@ public class RegisterActivity extends AppCompatActivity {
                 });
             }
         });
-
-
-
         textToLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -162,18 +158,7 @@ public class RegisterActivity extends AppCompatActivity {
                 finish();
             }
         });
-//        textAdmin.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Intent i = new Intent(getApplicationContext(), CreateAdminActivity.class);
-//                startActivity(i);
-//                finish();
-//            }
-//        });
-
     }
-
-
     private void anhxa() {
         editTextEmail = findViewById(R.id.input_register_email);
         editTextPassword = findViewById(R.id.input_register_password);

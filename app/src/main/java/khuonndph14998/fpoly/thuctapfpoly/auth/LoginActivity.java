@@ -38,16 +38,14 @@ public class LoginActivity extends AppCompatActivity {
     FirebaseFirestore fStore;
     private ProgressBar progressBar;
 
-//    @Override
-//    protected void onStart() {
-//        super.onStart();
-//        FirebaseUser user = mAuth.getCurrentUser();
-//        if (user != null){
-//            Intent i = new Intent(getApplicationContext(), MainActivity.class);
-//            startActivity(i);
-//            finish();
-//        }
-//    }
+    @Override
+    protected void onStart() {
+        super.onStart();
+        FirebaseUser user = mAuth.getCurrentUser();
+        if (user != null){
+            checkUserAccessLevel(user.getUid());
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -111,15 +109,17 @@ public class LoginActivity extends AppCompatActivity {
         df.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
-                if (documentSnapshot.getString("admin") != null){
+                String role = documentSnapshot.getString("admin");
+                String roleUser = documentSnapshot.getString("user");
+                if (role != null && role.equals("0")) {
                     Toast.makeText(LoginActivity.this, "Đăng nhập thành công", Toast.LENGTH_SHORT).show();
-                    Intent i = new Intent(getApplicationContext(),AdminActivity.class);
+                    Intent i = new Intent(getApplicationContext(), AdminActivity.class);
                     startActivity(i);
                     finish();
                 }
-                if (documentSnapshot.getString("user") != null){
+                if (roleUser != null && roleUser.equals("1")){
                     Toast.makeText(LoginActivity.this, "Đăng nhập thành công", Toast.LENGTH_SHORT).show();
-                    Intent i = new Intent(getApplicationContext(),MainActivity.class);
+                    Intent i = new Intent(getApplicationContext(), MainActivity.class);
                     startActivity(i);
                     finish();
                 }
