@@ -1,6 +1,8 @@
 package khuonndph14998.fpoly.thuctapfpoly.adapter;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,6 +21,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthException;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -34,6 +37,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.UserViewHolder
 
     Context mContext;
     ArrayList<User> userArrayList;
+    FirebaseFirestore fStore = FirebaseFirestore.getInstance();
 
     public UserAdapter(Context mContext, ArrayList<User> userArrayList) {
         this.mContext = mContext;
@@ -54,53 +58,19 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.UserViewHolder
         User u = userArrayList.get(position);
         holder.textView_email.setText(u.getEmail());
         holder.textView_name.setText(u.getFullname());
-        holder.textView_phone.setText(u.getPhone());
+        if (u.getRoles().equals("1")){
+            holder.textView_phone.setText("người dùng");
+        }
 
-//        holder.iconDelete.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                FirebaseAuth mAuth = FirebaseAuth.getInstance();
-//                FirebaseUser user = mAuth.getCurrentUser();
-//                FirebaseFirestore db = FirebaseFirestore.getInstance();
-//                String id = u.getId();
-//
-//                db.collection("User")
-//                        .whereEqualTo("id",id)
-//                        .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-//                            @Override
-//                            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-//                                if (task.isSuccessful() && !task.getResult().isEmpty()){
-//                                    DocumentSnapshot documentSnapshot = task.getResult().getDocuments().get(0);
-//                                    String documentID = documentSnapshot.getId();
-//                                    db.collection("User")
-//                                            .document(documentID)
-//                                            .delete()
-//                                            .addOnCompleteListener(new OnCompleteListener<Void>() {
-//                                                @Override
-//                                                public void onComplete(@NonNull Task<Void> task) {
-//                                                    Toast.makeText(mContext, "Xóa thành công", Toast.LENGTH_SHORT).show();
-//                                                }
-//                                            }).addOnFailureListener(new OnFailureListener() {
-//                                                @Override
-//                                                public void onFailure(@NonNull Exception e) {
-//                                                    Toast.makeText(mContext, "Một số lỗi xảy ra", Toast.LENGTH_SHORT).show();
-//                                                }
-//                                            });
-//                                }else {
-//                                    Toast.makeText(mContext, "Xóa thất bại", Toast.LENGTH_SHORT).show();
-//                                }
-//                            }
-//                        });
-//            }
-//        });
-        holder.iconDelete.setOnClickListener(new View.OnClickListener() {
+        if (u.getRoles().equals("2")){
+            holder.textView_phone.setText("khóa tài khoản");
+            holder.iconBan.setImageResource(R.drawable.icons_ban);
+            holder.iconBan.setEnabled(false);
+        }
+        holder.iconBan.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                FirebaseAuth mAuth = FirebaseAuth.getInstance();
-                FirebaseUser user = mAuth.getCurrentUser();
-                FirebaseFirestore db = FirebaseFirestore.getInstance();
-                String idUser = u.getId();
-
+                showConfirmationDialog(u.getId());
             }
 
         });
@@ -114,19 +84,48 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.UserViewHolder
     public static class UserViewHolder extends RecyclerView.ViewHolder{
 
         TextView textView_email,textView_name,textView_phone;
-        ImageView iconDelete;
+        ImageView iconBan;
         View mView;
 
         public UserViewHolder(@NonNull View itemView) {
             super(itemView);
             mView = itemView;
-
             textView_email  = itemView.findViewById(R.id.textView_user_email);
             textView_name  = itemView.findViewById(R.id.textView_user_name);
-            textView_phone  = itemView.findViewById(R.id.textView_user_phone);
-            iconDelete  = itemView.findViewById(R.id.icon_delete_user);
+            textView_phone  = itemView.findViewById(R.id.textView_user_status);
+            iconBan  = itemView.findViewById(R.id.icon_ban_user);
 
         }
+    }
+    private void showConfirmationDialog(String id){
+        AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
+        builder.setTitle("Xác nhận");
+        builder.setMessage("Bạn có chắc chắn muốn khóa tài khoản này?");
+        builder.setPositiveButton("Có", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                lockAccount(id);
+            }
+        }).setNegativeButton("Không",null);
+        AlertDialog dialog = builder.create();
+        dialog.show();
+    }
+    private void lockAccount(String id) {
+        fStore.collection("account")
+                .document(id)
+                .update("roles", "2")
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Toast.makeText(mContext, "Bạn đã khóa tài khoản người dùng", Toast.LENGTH_SHORT).show();
 
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        // Xử lý lỗi
+                    }
+                });
     }
 }

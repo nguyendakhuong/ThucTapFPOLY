@@ -89,6 +89,33 @@
             android:layout_gravity="center"
             android:textColor="@color/color_blue"/>
     </LinearLayout>
+    <LinearLayout
+        android:layout_marginTop="10dp"
+        android:gravity="center"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Liên hệ ngay"
+            android:layout_gravity="center"/>
+        <TextView
+            android:layout_marginLeft="5dp"
+            android:id="@+id/text_login_contact"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="1900191919"
+            android:layout_gravity="center"
+            android:textColor="@color/color_blue"/>
+        <TextView
+            android:layout_marginLeft="5dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="để được tư vấn và hỗ trợ"
+            android:layout_gravity="center"/>
+    </LinearLayout>
+
 
 
 

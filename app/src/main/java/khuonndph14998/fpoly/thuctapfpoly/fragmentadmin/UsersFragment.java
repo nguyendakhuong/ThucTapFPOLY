@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Handler;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,14 +23,18 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.firestore.DocumentChange;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FieldPath;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import khuonndph14998.fpoly.thuctapfpoly.R;
 import khuonndph14998.fpoly.thuctapfpoly.adapter.UserAdapter;
@@ -65,9 +70,10 @@ public class UsersFragment extends Fragment {
 
 
         db = FirebaseFirestore.getInstance();
-        userArrayList = new ArrayList<User>();
+        userArrayList = new ArrayList<>();
         userAdapter = new UserAdapter(getContext(),userArrayList);
         rclView_user.setAdapter(userAdapter);
+
         progressDialog = new ProgressDialog(getContext());
         progressDialog.setCancelable(false);
         progressDialog.setMessage("Đang tải dữ liệu");
@@ -85,8 +91,6 @@ public class UsersFragment extends Fragment {
                 progressDialog.dismiss();
             }
         });
-
-
         icon_search.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -98,30 +102,29 @@ public class UsersFragment extends Fragment {
                 }
             }
         });
-
-
         return view;
     }
-
     private void fetchDataAndUpdateArrayList() {
-        db.collection("account").orderBy("user", Query.Direction.ASCENDING)
-                .addSnapshotListener(new EventListener<QuerySnapshot>() {
-                    @Override
-                    public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
-                        if (error != null){
-                            if(progressDialog.isShowing())
-                                progressDialog.dismiss();
-                            return;
-                        }
+        db.collection("account")
+                .addSnapshotListener((value, error) -> {
+                    if (error != null) {
+                        // Xử lý lỗi nếu có
+                        return;
+                    }
+
+                    if (value != null && !value.isEmpty()) {
                         userArrayList.clear();
-                        for (DocumentChange document  : value.getDocumentChanges()){
-                            if (document.getType() == DocumentChange.Type.ADDED){
-                                userArrayList.add(document.getDocument().toObject(User.class));
+                        for (QueryDocumentSnapshot document : value) {
+                            String userId = document.getId();
+                            String fullName = document.getString("fullname");
+                            String email = document.getString("email");
+                            String role = document.getString("roles");
+                            if (role != null && !role.isEmpty()) {
+                                User user = new User(userId, fullName, email, role);
+                                userArrayList.add(user);
                             }
-                            userAdapter.notifyDataSetChanged();
-                            if(progressDialog.isShowing())
-                                progressDialog.dismiss();
                         }
+                        userAdapter.notifyDataSetChanged();
                     }
                 });
     }

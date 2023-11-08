@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
@@ -33,7 +34,7 @@ public class LoginActivity extends AppCompatActivity {
 
     private TextInputEditText editTextEmail, editTextPassword;
     private Button btnLogin;
-    private TextView textToRegister,tv_forgotPassword;
+    private TextView textToRegister,tv_forgotPassword,tv_login_contact;
     FirebaseAuth mAuth;
     FirebaseFirestore fStore;
     private ProgressBar progressBar;
@@ -102,6 +103,18 @@ public class LoginActivity extends AppCompatActivity {
                 finish();
             }
         });
+
+        tv_login_contact.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String phoneNumber = "1900191919";
+
+                Intent intent = new Intent(Intent.ACTION_DIAL);
+                intent.setData(Uri.parse("tel:" + phoneNumber));
+
+                startActivity(intent);
+            }
+        });
     }
 
     private void checkUserAccessLevel(String uid) {
@@ -110,7 +123,7 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
                 String role = documentSnapshot.getString("admin");
-                String roleUser = documentSnapshot.getString("user");
+                String roleUser = documentSnapshot.getString("roles");
                 if (role != null && role.equals("0")) {
                     Toast.makeText(LoginActivity.this, "Đăng nhập thành công", Toast.LENGTH_SHORT).show();
                     Intent i = new Intent(getApplicationContext(), AdminActivity.class);
@@ -122,6 +135,10 @@ public class LoginActivity extends AppCompatActivity {
                     Intent i = new Intent(getApplicationContext(), MainActivity.class);
                     startActivity(i);
                     finish();
+                }
+                if (roleUser != null && roleUser.equals("2")){
+                    Toast.makeText(LoginActivity.this, "Tài khoản của bạn đã bị khóa", Toast.LENGTH_SHORT).show();
+
                 }
             }
         });
@@ -136,5 +153,6 @@ public class LoginActivity extends AppCompatActivity {
         fStore = FirebaseFirestore.getInstance();
         progressBar = findViewById(R.id.progressbar);
         tv_forgotPassword = findViewById(R.id.forgotPw);
+        tv_login_contact = findViewById(R.id.text_login_contact);
     }
 }

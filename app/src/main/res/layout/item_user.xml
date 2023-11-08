@@ -38,9 +38,9 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="phone"
+                    android:text="trang thái"
                     android:textSize="16dp"
-                    android:id="@+id/textView_user_phone"/>
+                    android:id="@+id/textView_user_status"/>
             </LinearLayout>
 
         </LinearLayout>
@@ -50,8 +50,8 @@
             android:layout_weight="1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_baseline_delete"
-            android:id="@+id/icon_delete_user"/>
+            android:src="@drawable/icons_ban_red"
+            android:id="@+id/icon_ban_user"/>
     </LinearLayout>
 
 </LinearLayout>

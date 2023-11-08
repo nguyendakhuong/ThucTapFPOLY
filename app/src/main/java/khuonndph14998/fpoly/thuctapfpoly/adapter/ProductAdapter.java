@@ -58,7 +58,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
 
     public static class ProductViewHolder extends RecyclerView.ViewHolder {
 
-        private TextView textView_name, textView_code, textView_describe, textView_note, textView_quantity, textView_selectedItem,text_Price;
+        private TextView textView_name, textView_code, textView_quantity, textView_selectedItem,text_Price;
         private ImageView imageView_product;
 
         public ProductViewHolder(@NonNull View itemView) {

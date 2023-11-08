@@ -32,6 +32,7 @@ import java.util.UUID;
 import khuonndph14998.fpoly.thuctapfpoly.MainActivity;
 import khuonndph14998.fpoly.thuctapfpoly.R;
 import khuonndph14998.fpoly.thuctapfpoly.admin.CreateAdminActivity;
+import khuonndph14998.fpoly.thuctapfpoly.model.User;
 
 public class RegisterActivity extends AppCompatActivity {
 
@@ -41,17 +42,6 @@ public class RegisterActivity extends AppCompatActivity {
     FirebaseAuth fAuth;
     ProgressBar progressBar;
     FirebaseFirestore fstore;
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-        FirebaseUser user = fAuth.getCurrentUser();
-        if (user != null){
-            Intent i = new Intent(getApplicationContext(), MainActivity.class);
-            startActivity(i);
-            finish();
-        }
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,9 +56,9 @@ public class RegisterActivity extends AppCompatActivity {
                 String password = editTextPassword.getText().toString().trim();
                 String confirmPassword = editTextComfirmPassword.getText().toString().trim();
                 String name = editTextName.getText().toString().trim();
-                String phone = editTextPhone.getText().toString().trim();
                 String EMAIL_REGEX = "^([a-zA-Z0-9_\\.\\-])+\\@(([a-zA-Z0-9\\-])+\\.)+([a-zA-Z0-9]{2,4})+$";
                 String id = UUID.randomUUID().toString();
+                String roles = "1" ;
 
                 if (TextUtils.isEmpty(email)){
                     Toast.makeText(RegisterActivity.this, "Nhập email", Toast.LENGTH_SHORT).show();
@@ -76,10 +66,6 @@ public class RegisterActivity extends AppCompatActivity {
                 }
                 if (TextUtils.isEmpty(name)){
                     Toast.makeText(RegisterActivity.this, "Nhập tên", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-                if (TextUtils.isEmpty(phone)){
-                    Toast.makeText(RegisterActivity.this, "Nhập số điện thoại", Toast.LENGTH_SHORT).show();
                     return;
                 }
                 if (TextUtils.isEmpty(password)){
@@ -128,7 +114,7 @@ public class RegisterActivity extends AppCompatActivity {
                             @Override
                             public void onFailure(@NonNull Exception e) {
                                 progressBar.setVisibility(View.GONE);
-                                Toast.makeText(RegisterActivity.this, "Tài khoản đã tồn tại", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(RegisterActivity.this, "Tài khoản đã được đăng ký", Toast.LENGTH_SHORT).show();
                             }
                         });
                 FirebaseAuth.getInstance().addIdTokenListener(new FirebaseAuth.IdTokenListener() {
@@ -137,14 +123,14 @@ public class RegisterActivity extends AppCompatActivity {
                         FirebaseUser user = firebaseAuth.getCurrentUser();
                         if (user != null && user.isEmailVerified()) {
                             DocumentReference df = fstore.collection("account").document(user.getUid());
-                            Map<String, Object> userInfo = new HashMap<>();
-                            userInfo.put("id",id);
-                            userInfo.put("email", email);
-                            userInfo.put("fullname", name);
-                            userInfo.put("phone", phone);
-                            userInfo.put("user", "1");
-                            df.set(userInfo);
-                            finish();
+                            User userObj = new User();
+                            userObj.setId(id);
+                            userObj.setEmail(email);
+                            userObj.setFullname(name);
+                            userObj.setRoles(roles);
+                            df.set(userObj);
+
+//                            finish();
                         }
                     }
                 });
@@ -170,7 +156,6 @@ public class RegisterActivity extends AppCompatActivity {
         progressBar = findViewById(R.id.progressbarRegister);
         textAdmin = findViewById(R.id.text_toAdmin);
         editTextName = findViewById(R.id.input_register_name);
-        editTextPhone = findViewById(R.id.input_register_phone);
     }
 
 }
