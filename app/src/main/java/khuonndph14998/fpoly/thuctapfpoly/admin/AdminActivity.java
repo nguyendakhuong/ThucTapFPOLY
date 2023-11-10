@@ -129,11 +129,7 @@ public class AdminActivity extends AppCompatActivity implements NavigationView.O
                 .delete().addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void unused) {
-                        Toast.makeText(getApplicationContext(), "Xóa thành công", Toast.LENGTH_SHORT).show();
-                            deleteAdmin();
-                            Intent i = new Intent(AdminActivity.this,LoginActivity.class);
-                            startActivity(i);
-                            finish();
+                        dialogDeleteAdmin();
                     }
                 }).addOnFailureListener(new OnFailureListener() {
                     @Override
@@ -142,6 +138,29 @@ public class AdminActivity extends AppCompatActivity implements NavigationView.O
                     }
                 });
 
+    }
+    private void dialogDeleteAdmin(){
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Xác nhận");
+        builder.setMessage("Bạn muốn xóa tài khoản admin hiện tại?");
+        builder.setPositiveButton("Xóa", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                deleteAdmin();
+                Toast.makeText(getApplicationContext(), "Xóa thành công", Toast.LENGTH_SHORT).show();
+                Intent i = new Intent(AdminActivity.this,LoginActivity.class);
+                startActivity(i);
+                finish();
+            }
+        });
+        builder.setNegativeButton("Hủy", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+        AlertDialog dialog = builder.create();
+        dialog.show();
     }
     private void deleteAdmin(){
         FirebaseAuth mAuth = FirebaseAuth.getInstance();

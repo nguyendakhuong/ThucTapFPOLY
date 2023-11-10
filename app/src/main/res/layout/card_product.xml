@@ -17,6 +17,9 @@
             android:scaleType="centerCrop"
             android:src="@drawable/ic_baseline_account_circle" />
         <Button
+
+            android:layout_marginTop="5dp"
+            android:layout_marginRight="5dp"
             android:background="@drawable/ic_baseline_favorite_border"
             android:layout_width="30dp"
             android:layout_height="30dp"

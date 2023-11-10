@@ -119,27 +119,23 @@ public class LoginActivity extends AppCompatActivity {
 
     private void checkUserAccessLevel(String uid) {
         DocumentReference df = fStore.collection("account").document(uid);
-        df.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-            @Override
-            public void onSuccess(DocumentSnapshot documentSnapshot) {
-                String role = documentSnapshot.getString("admin");
-                String roleUser = documentSnapshot.getString("roles");
-                if (role != null && role.equals("0")) {
-                    Toast.makeText(LoginActivity.this, "Đăng nhập thành công", Toast.LENGTH_SHORT).show();
-                    Intent i = new Intent(getApplicationContext(), AdminActivity.class);
-                    startActivity(i);
-                    finish();
-                }
-                if (roleUser != null && roleUser.equals("1")){
-                    Toast.makeText(LoginActivity.this, "Đăng nhập thành công", Toast.LENGTH_SHORT).show();
-                    Intent i = new Intent(getApplicationContext(), MainActivity.class);
-                    startActivity(i);
-                    finish();
-                }
-                if (roleUser != null && roleUser.equals("2")){
-                    Toast.makeText(LoginActivity.this, "Tài khoản của bạn đã bị khóa", Toast.LENGTH_SHORT).show();
-
-                }
+        df.get().addOnSuccessListener(documentSnapshot -> {
+            String role = documentSnapshot.getString("admin");
+            String roleUser = documentSnapshot.getString("roles");
+            if (role != null && role.equals("0")) {
+                Toast.makeText(LoginActivity.this, "Đăng nhập thành công", Toast.LENGTH_SHORT).show();
+                Intent i = new Intent(getApplicationContext(), AdminActivity.class);
+                startActivity(i);
+                finish();
+            } else if (roleUser != null && roleUser.equals("1")) {
+                Toast.makeText(LoginActivity.this, "Đăng nhập thành công", Toast.LENGTH_SHORT).show();
+                Intent i = new Intent(getApplicationContext(), MainActivity.class);
+                startActivity(i);
+                finish();
+            } else if (roleUser != null && roleUser.equals("2")) {
+                Toast.makeText(LoginActivity.this, "Tài khoản của bạn đã bị khóa", Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(LoginActivity.this, "Tài khoản không tồn tại", Toast.LENGTH_SHORT).show();
             }
         });
     }

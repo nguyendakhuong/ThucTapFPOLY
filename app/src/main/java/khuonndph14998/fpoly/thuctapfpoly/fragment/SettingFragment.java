@@ -23,6 +23,8 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import khuonndph14998.fpoly.thuctapfpoly.CreateProductActivity;
 import khuonndph14998.fpoly.thuctapfpoly.R;
@@ -108,12 +110,13 @@ public class SettingFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-                builder.setTitle("Xác nhận xóa tài khoản");
+                builder.setTitle("Xác nhận");
                 builder.setMessage("Bạn có chắc chắn muốn xóa tài khoản?");
                 builder.setPositiveButton("Xóa", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         deleteAccount();
+
                     }
                 }).setNegativeButton("Hủy", null);
                 AlertDialog dialog = builder.create();
@@ -123,21 +126,41 @@ public class SettingFragment extends Fragment {
         });
         return view;
     }
+    private void deleteInfoAccount() {
+        String userEmail = getCurrentUserEmail();
+        if (userEmail != null) {
+            String emailPath = userEmail.replace("@gmail.com", "");
+            String databaseFavPath = "/Users/" + emailPath + "/FavProduct";
+            String databaseInfoUserPath = "/Users/" + emailPath + "/InfoUser";
+            String databaseProduceCodePath = "/Users/" + emailPath + "/productCodes";
+
+            DatabaseReference favRef = FirebaseDatabase.getInstance().getReference(databaseFavPath);
+            DatabaseReference infoUserRef = FirebaseDatabase.getInstance().getReference(databaseInfoUserPath);
+            DatabaseReference productRef = FirebaseDatabase.getInstance().getReference(databaseProduceCodePath);
+
+            favRef.removeValue();
+            infoUserRef.removeValue();
+            productRef.removeValue();
+
+        }
+    }
 
     private void deleteAccount(){
-        FirebaseAuth auth = FirebaseAuth.getInstance();
-        FirebaseUser user = auth.getCurrentUser();
-
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if (user != null) {
             user.delete()
-                    .addOnCompleteListener(new OnCompleteListener<Void>() {
-                        @Override
-                        public void onComplete(@NonNull Task<Void> task) {
-                            if (task.isSuccessful()) {
-                                Toast.makeText(getContext(), "Bạn đã xóa tài khoản", Toast.LENGTH_SHORT).show();
-                            } else {
-                                Toast.makeText(getContext(), "Lỗi hệ thống", Toast.LENGTH_SHORT).show();
-                            }
+                    .addOnCompleteListener(task -> {
+                        if (task.isSuccessful()) {
+                            deleteInfoAccount();
+                            Intent i = new Intent(getContext(),LoginActivity.class);
+                            startActivity(i);
+                            // Xóa tài khoản thành công
+                            Toast.makeText(getContext(), "Bạn đã xóa tài khoản", Toast.LENGTH_SHORT).show();
+                            // Thực hiện các hoạt động tiếp theo sau khi xóa tài khoản (nếu cần)
+
+                        } else {
+                            // Xóa tài khoản thất bại
+                            Toast.makeText(getContext(), "Lỗi hệ thống, không thể xóa tài khoản", Toast.LENGTH_SHORT).show();
                         }
                     });
         }

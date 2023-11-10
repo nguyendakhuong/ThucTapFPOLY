@@ -60,12 +60,14 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.UserViewHolder
         holder.textView_name.setText(u.getFullname());
         if (u.getRoles().equals("1")){
             holder.textView_phone.setText("người dùng");
+            holder.iconBan.setVisibility(View.VISIBLE);
+            holder.iconUnlock.setVisibility(View.GONE);
         }
 
         if (u.getRoles().equals("2")){
             holder.textView_phone.setText("khóa tài khoản");
-            holder.iconBan.setImageResource(R.drawable.icons_ban);
-            holder.iconBan.setEnabled(false);
+            holder.iconBan.setVisibility(View.GONE);
+            holder.iconUnlock.setVisibility(View.VISIBLE);
         }
         holder.iconBan.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -73,6 +75,12 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.UserViewHolder
                 showConfirmationDialog(u.getId());
             }
 
+        });
+        holder.iconUnlock.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                unlockAccount(u.getId());
+            }
         });
     }
 
@@ -84,7 +92,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.UserViewHolder
     public static class UserViewHolder extends RecyclerView.ViewHolder{
 
         TextView textView_email,textView_name,textView_phone;
-        ImageView iconBan;
+        ImageView iconBan,iconUnlock;
         View mView;
 
         public UserViewHolder(@NonNull View itemView) {
@@ -94,6 +102,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.UserViewHolder
             textView_name  = itemView.findViewById(R.id.textView_user_name);
             textView_phone  = itemView.findViewById(R.id.textView_user_status);
             iconBan  = itemView.findViewById(R.id.icon_ban_user);
+            iconUnlock = itemView.findViewById(R.id.icon_unlock);
 
         }
     }
@@ -127,5 +136,33 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.UserViewHolder
                         // Xử lý lỗi
                     }
                 });
+    }
+    private void unlockAccount(String id){
+        AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
+        builder.setTitle("Xác nhận");
+        builder.setMessage("Bạn có muốn mở khóa tài khoản này?");
+        builder.setPositiveButton("Có", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                fStore.collection("account")
+                        .document(id)
+                        .update("roles", "1")
+                        .addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void aVoid) {
+                                Toast.makeText(mContext, "Bạn đã mở khóa tài khoản người dùng", Toast.LENGTH_SHORT).show();
+
+                            }
+                        })
+                        .addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                // Xử lý lỗi
+                            }
+                        });
+            }
+        }).setNegativeButton("Không",null);
+        AlertDialog dialog = builder.create();
+        dialog.show();
     }
 }
